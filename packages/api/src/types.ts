@@ -1,7 +1,7 @@
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { NodePgDatabase } from "drizzle-orm/node-postgres"
 
 declare module "fastify" {
   interface FastifyInstance {
-    db: NodePgDatabase<Record<string, never>>;
+    db: NodePgDatabase<Record<string, any>>
   }
 }

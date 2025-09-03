@@ -1,2 +1,2 @@
-export * from "./createConnection";
-export * from "./schema/users";
+export * from "./createDbConnection"
+export type { DatabaseSchema, DatabaseInstance } from "./db.types"

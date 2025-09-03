@@ -1,7 +1,7 @@
-import Fastify from "fastify";
-import closeWithGrace from "close-with-grace";
-import serviceApp from "./app";
-import fp from "fastify-plugin";
+import serviceApp from "@/src/app"
+import closeWithGrace from "close-with-grace"
+import Fastify from "fastify"
+import fp from "fastify-plugin"
 
 function getLoggerOptions() {
   // Only if the program is running in an interactive terminal
@@ -15,10 +15,10 @@ function getLoggerOptions() {
           ignore: "pid,hostname",
         },
       },
-    };
+    }
   }
 
-  return { level: "silent" };
+  return { level: "silent" }
 }
 
 const app = Fastify({
@@ -29,28 +29,28 @@ const app = Fastify({
       removeAdditional: "all",
     },
   },
-});
+})
 
 async function init() {
-  app.register(fp(serviceApp));
+  app.register(fp(serviceApp))
 
   closeWithGrace({ delay: 500 }, async ({ err }) => {
     if (err != null) {
-      app.log.error(err);
+      app.log.error(err)
     }
 
-    await app.close();
-  });
+    await app.close()
+  })
 
-  await app.ready();
+  await app.ready()
 
   try {
     // Start listening.
-    await app.listen({ port: 3000 });
+    await app.listen({ port: 3000 })
   } catch (err) {
-    app.log.error(err);
-    process.exit(1);
+    app.log.error(err)
+    process.exit(1)
   }
 }
 
-init();
+init()

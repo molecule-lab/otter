@@ -1,0 +1,26 @@
+{
+  "name": "@otter/eslint-config",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "exports": {
+    "./base": "./base.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@eslint/js": "^9.34.0",
+    "eslint": "^9",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-no-relative-import-paths": "^1.6.1",
+    "eslint-plugin-only-warn": "^1.1.0",
+    "eslint-plugin-turbo": "^2.5.6",
+    "eslint-plugin-unused-imports": "^4.2.0",
+    "typescript-eslint": "^8.42.0"
+  }
+}

@@ -1,11 +1,12 @@
-import env from "@fastify/env";
+import env from "@fastify/env"
+
 declare module "fastify" {
   export interface FastifyInstance {
     config: {
-      PORT: number;
-      SECRET: string;
-      DB_CONNECTION_URL: string;
-    };
+      PORT: number
+      SECRET: string
+      DB_CONNECTION_URL: string
+    }
   }
 }
 
@@ -24,7 +25,7 @@ const schema = {
       type: "string",
     },
   },
-};
+}
 export const autoConfig = {
   // Decorate Fastify instance with `config` key
   // Optional, default: 'config'
@@ -44,11 +45,11 @@ export const autoConfig = {
   // Source for the configuration data
   // Optional, default: process.env
   data: process.env,
-};
+}
 
 /**
  * This plugins helps to check environment variables.
  *
  * @see {@link https://github.com/fastify/fastify-env}
  */
-export default env;
+export default env

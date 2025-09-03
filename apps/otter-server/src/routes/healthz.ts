@@ -1,7 +1,4 @@
-import {
-  FastifyPluginAsyncTypebox,
-  Type,
-} from "@fastify/type-provider-typebox";
+import { FastifyPluginAsyncTypebox, Type } from "@fastify/type-provider-typebox"
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.get(
@@ -16,9 +13,9 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       },
     },
     async function () {
-      return { message: "Welcome to the official fastify demo!" };
+      return { message: "Welcome to the official fastify demo!" }
     },
-  );
-};
+  )
+}
 
-export default plugin;
+export default plugin

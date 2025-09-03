@@ -1,7 +1,7 @@
-import { initTRPC } from "@trpc/server";
-import { z } from "zod";
+import { initTRPC } from "@trpc/server"
+import { z } from "zod"
 
-const t = initTRPC.create();
+const t = initTRPC.create()
 
 export const appRouter = t.router({
   hello: t.procedure
@@ -11,6 +11,6 @@ export const appRouter = t.router({
   add: t.procedure
     .input(z.object({ a: z.number(), b: z.number() }))
     .mutation(({ input }) => input.a + input.b),
-});
+})
 
-export type AppRouter = typeof appRouter;
+export type AppRouter = typeof appRouter
