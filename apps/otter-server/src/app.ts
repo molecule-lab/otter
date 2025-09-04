@@ -23,7 +23,7 @@ export default async function serviceApp(
 
   await fastify.route({
     method: ["GET", "POST", "OPTIONS"],
-    url: "/api/auth/*",
+    url: "/api/v1/auth/*",
     async handler(request, reply) {
       try {
         const url = new URL(request.url, `http://${request.headers.host}`)

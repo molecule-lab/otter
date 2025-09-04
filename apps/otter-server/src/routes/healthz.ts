@@ -1,3 +1,4 @@
+import { healthCheckHandler } from "@/src/controllers/healthz"
 import { FastifyPluginAsyncTypebox, Type } from "@fastify/type-provider-typebox"
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
@@ -12,9 +13,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         },
       },
     },
-    async function () {
-      return { message: "Welcome to the official fastify demo!" }
-    },
+    healthCheckHandler,
   )
 }
 

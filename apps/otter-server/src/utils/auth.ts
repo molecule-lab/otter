@@ -3,6 +3,7 @@ import { account, apikey, session, user, verification } from "@otter/db/schema"
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { apiKey, bearer } from "better-auth/plugins"
+import { ulid } from "ulid"
 
 // Todo make this accept trusted origins, baseurl and secret
 export function createAuth(db?: DatabaseInstance) {
@@ -14,16 +15,30 @@ export function createAuth(db?: DatabaseInstance) {
       provider: "pg",
       schema: { account, apikey, session, user, verification },
     }),
+    advanced: {
+      database: {
+        generateId: () => ulid(),
+      },
+    },
+    basePath: "/api/v1/auth",
     emailAndPassword: {
       requireEmailVerification: false,
       enabled: true,
     },
+    telemetry: { enabled: false },
     plugins: [
       apiKey({
         keyExpiration: {
-          defaultExpiresIn: null,
-          disableCustomExpiresTime: true,
+          defaultExpiresIn: 60 * 60 * 24 * 30, // 30 days
         },
+        rateLimit: {
+          maxRequests: 100,
+          timeWindow: 60 * 1000, // 1 minute
+        },
+        disableSessionForAPIKeys: true,
+        defaultKeyLength: 128,
+        requireName: true,
+        defaultPrefix: "otter_pk_",
       }),
       bearer(),
     ],

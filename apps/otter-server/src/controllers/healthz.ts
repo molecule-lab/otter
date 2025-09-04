@@ -1,7 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 
-export const healthCheckHandler = (_: FastifyRequest, reply: FastifyReply) => {
+export const healthCheckHandler = async (
+  _: FastifyRequest,
+  reply: FastifyReply,
+) => {
   reply.code(200).send({
-    message: "Server Running",
+    message: "Welcome to the official fastify demo!",
   })
 }
