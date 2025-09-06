@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "watch": "tsc -w",
     "dev": "nodemon --exec tsx src/server.ts",
     "dev:start": "npm run build && fastify start --ignore-watch=.ts$ -w -l info -P dist/app.js",
