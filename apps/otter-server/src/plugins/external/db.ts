@@ -33,4 +33,5 @@ async function dbPlugin(fastify: FastifyInstance) {
 // Export the plugin
 export default fp(dbPlugin, {
   name: "database",
+  dependencies: ["@fastify/env"],
 })

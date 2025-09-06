@@ -1,7 +1,17 @@
-import { healthCheckHandler } from "@/src/controllers/healthz"
-import { FastifyPluginAsyncTypebox, Type } from "@fastify/type-provider-typebox"
+/**
+ * Health check route plugin.
+ *
+ * Responsibilities:
+ * - Register GET `/` endpoint that returns a `{ message: string }` payload.
+ * - Define response schema using TypeBox for runtime validation and types.
+ * - Delegate handling to `healthCheckHandler`.
+ */
 
-const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
+import { healthCheckHandler } from "@/src/controllers/healthz"
+import { Type } from "@fastify/type-provider-typebox"
+import { FastifyInstance } from "fastify"
+
+const plugin = async (fastify: FastifyInstance) => {
   fastify.get(
     "/",
     {

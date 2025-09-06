@@ -1,3 +1,9 @@
+/**
+ * This plugins helps to check environment variables.
+ *
+ * @see {@link https://github.com/fastify/fastify-env}
+ */
+
 import env from "@fastify/env"
 
 declare module "fastify" {
@@ -47,9 +53,4 @@ export const autoConfig = {
   data: process.env,
 }
 
-/**
- * This plugins helps to check environment variables.
- *
- * @see {@link https://github.com/fastify/fastify-env}
- */
 export default env

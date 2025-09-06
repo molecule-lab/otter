@@ -1,3 +1,15 @@
+/**
+ * Authentication utilities for the Otter server.
+ *
+ * Responsibilities:
+ * - Build and configure a Better Auth instance via `createAuth` using Drizzle adapter.
+ * - Wire database schema models and ULID-based ID generation.
+ * - Configure auth features: base path, origins, email/password, API keys, bearer.
+ *
+ * - Export:
+ *   - `createAuth(db?)`: primary factory to construct configured auth.
+ */
+
 import { DatabaseInstance } from "@otter/db"
 import { account, apikey, session, user, verification } from "@otter/db/schema"
 import { betterAuth } from "better-auth"

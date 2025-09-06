@@ -1,3 +1,9 @@
+/**
+ * This plugins enables the use of CORS.
+ *
+ * @see {@link https://github.com/fastify/fastify-cors}
+ */
+
 import cors, { FastifyCorsOptions } from "@fastify/cors"
 
 export const autoConfig: FastifyCorsOptions = {
@@ -8,9 +14,4 @@ export const autoConfig: FastifyCorsOptions = {
   maxAge: 86400,
 }
 
-/**
- * This plugins enables the use of CORS.
- *
- * @see {@link https://github.com/fastify/fastify-cors}
- */
 export default cors

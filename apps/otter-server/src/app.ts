@@ -1,3 +1,17 @@
+/**
+ * Fastify application plugin for the Otter server.
+ *
+ * Responsibilities:
+ * - Auto-register external and app plugins from `plugins/external` and `plugins/app`.
+ * - Proxy authentication requests under `/api/v1/auth/*` to the Better Auth handler.
+ * - Mount tRPC router at `/trpc` using `@otter/api` (router and context).
+ * - Auto-register all route modules from `routes` with hooks cascading enabled.
+ * - Define centralized error handling and a 404 handler with rate limiting.
+ *
+ * Export:
+ * - Default async function `serviceApp(fastify, opts)` consumed by `server.ts`.
+ */
+
 import path from "node:path"
 import fastifyAutoload from "@fastify/autoload"
 import { appRouter, createContext } from "@otter/api"

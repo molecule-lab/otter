@@ -1,3 +1,9 @@
+/**
+ * This plugins allows to parse the multipart content-type
+ *
+ * @see {@link https://github.com/fastify/fastify-multipart}
+ */
+
 import fastifyMultipart from "@fastify/multipart"
 
 export const autoConfig = {
@@ -11,9 +17,4 @@ export const autoConfig = {
   },
 }
 
-/**
- * This plugins allows to parse the multipart content-type
- *
- * @see {@link https://github.com/fastify/fastify-multipart}
- */
 export default fastifyMultipart

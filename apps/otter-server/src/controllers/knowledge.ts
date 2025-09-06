@@ -1,44 +1,36 @@
-import { createWriteStream } from "fs"
-import fs from "fs/promises"
-import { join } from "path"
+/**
+ * Knowledge controllers for document processing.
+ *
+ * Responsibilities:
+ * - `createKnowledge`: Handle file uploads, save to disk, and create processing jobs.
+ * - `fetchKnowledge`: Placeholder for document retrieval functionality.
+ * - Manage file storage in `__uploads__` directory with proper error handling.
+ * - Insert job records into `knowledge_jobs` table for background processing.
+ */
+
+import { knowledgeJobsService } from "@/src/services/knowledge-jobs"
 import { FastifyReply, FastifyRequest } from "fastify"
 
-const createDocuments = async (
+const createKnowledge = async (
   request: FastifyRequest,
   reply: FastifyReply,
 ) => {
   try {
     const file = await request.file()
 
-    const uploadDir = join(process.cwd(), "..", "..", "__uploads__")
-    await fs.mkdir(uploadDir, { recursive: true })
-
-    if (!file?.filename) {
-      return
+    if (!file) {
+      return reply.badRequest()
     }
 
-    const filePath = join(uploadDir, file.filename)
+    const knowledgeJob = await knowledgeJobsService(
+      request.server.knowledgeJobsRepository,
+    ).processFile(file, request.apiKeyId!)
 
-    await new Promise((resolve, reject) => {
-      const ws = createWriteStream(filePath)
-      file?.file.pipe(ws)
-      ws.on("finish", resolve)
-      ws.on("error", reject)
-    })
-
-    const absolutePath = join(
-      process.cwd(),
-      "..",
-      "..",
-      "__uploads__",
-      file.filename,
-    )
-
+    // Return to user
     return reply.code(200).send({
       message: "Document Added for processing",
       data: {
-        absolutePath,
-        filepath: `__uploads__/${file?.filename}`,
+        knowledgeJob,
       },
     })
   } catch (error) {
@@ -50,8 +42,8 @@ const createDocuments = async (
   }
 }
 
-const getDocuments = async (_: FastifyRequest, reply: FastifyReply) => {
+const fetchKnowledge = async (_: FastifyRequest, reply: FastifyReply) => {
   return reply.code(200).send({ message: "Fetch Documents" })
 }
 
-export { getDocuments, createDocuments }
+export { createKnowledge, fetchKnowledge }

@@ -1,3 +1,16 @@
+/**
+ * Fastify server bootstrap for the Otter service.
+ *
+ * Responsibilities:
+ * - Configure logger and AJV validation options.
+ * - Register the application plugin `serviceApp`.
+ * - Install graceful shutdown via `close-with-grace`.
+ * - Start the HTTP server on port provided in config and handle startup errors.
+ *
+ * Entry point:
+ * - Calls `init()` to initialize and launch the server.
+ */
+
 import serviceApp from "@/src/app"
 import closeWithGrace from "close-with-grace"
 import Fastify from "fastify"
@@ -46,7 +59,7 @@ async function init() {
 
   try {
     // Start listening.
-    await app.listen({ port: 3000 })
+    await app.listen({ port: app.config.PORT })
   } catch (err) {
     app.log.error(err)
     process.exit(1)

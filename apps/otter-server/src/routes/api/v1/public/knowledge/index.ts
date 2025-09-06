@@ -1,7 +1,17 @@
-import { createDocuments, getDocuments } from "@/src/controllers/knowledge"
-import { FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox"
+/**
+ * Knowledge routes plugin.
+ *
+ * Responsibilities:
+ * - Register POST and GET endpoints at the mounted path.
+ * - Verify API key in a `preHandler`; handle rate limiting and unauthorized cases.
+ * - Attach `apiKeyId` to the request for downstream handlers.
+ * - Delegate POST to `createKnowledge` and GET to `fetchKnowledge`.
+ */
 
-const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
+import { createKnowledge, fetchKnowledge } from "@/src/controllers/knowledge"
+import { FastifyInstance } from "fastify"
+
+const plugin = async (fastify: FastifyInstance) => {
   fastify.addHook("preHandler", async (request, reply) => {
     const apiKey = await fastify.auth.api.verifyApiKey({
       body: {
@@ -16,9 +26,11 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
     if (!apiKey.valid) {
       return reply.unauthorized()
     }
+
+    request.apiKeyId = apiKey.key?.id
   })
 
-  fastify.post("/", {}, createDocuments)
+  fastify.post("/", {}, createKnowledge)
 
   fastify.get(
     "/",
@@ -33,8 +45,14 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         },
       },
     },
-    getDocuments,
+    fetchKnowledge,
   )
 }
 
 export default plugin
+
+declare module "fastify" {
+  interface FastifyRequest {
+    apiKeyId?: string // Replace 'any' with your actual API key type
+  }
+}
