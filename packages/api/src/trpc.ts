@@ -12,7 +12,7 @@
  * - `AppRouter` - TypeScript type for the router.
  */
 
-import { Context } from "@/src/context"
+import { Context } from "@/context"
 import { initTRPC } from "@trpc/server"
 import { z } from "zod"
 
