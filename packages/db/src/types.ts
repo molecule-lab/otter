@@ -12,7 +12,7 @@
  * - `DatabaseInstance` - Typed database instance for Drizzle ORM operations.
  */
 
-import { account, apikey, session, user, verification } from "@/src/schema"
+import { account, apikey, session, user, verification } from "@/schema"
 import { NodePgDatabase } from "drizzle-orm/node-postgres"
 
 /**

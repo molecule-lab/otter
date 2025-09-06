@@ -12,8 +12,8 @@
  *   Drizzle database instance with all schemas.
  */
 
-import * as authSchema from "@/src/schema/better-auth"
-import * as knowledgeSchema from "@/src/schema/knowledge"
+import * as authSchema from "@/schema/better-auth"
+import * as knowledgeSchema from "@/schema/knowledge"
 import { drizzle } from "drizzle-orm/node-postgres"
 import { Pool } from "pg"
 
