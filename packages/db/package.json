@@ -17,7 +17,8 @@
   "dependencies": {
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.5",
-    "pg": "^8.16.3"
+    "pg": "^8.16.3",
+    "ulid": "^3.0.1"
   },
   "devDependencies": {
     "@types/pg": "^8.15.5",

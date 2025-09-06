@@ -41,4 +41,6 @@ yarn-error.log*
 
 otter-ui
 
+
 __uploads__
+.local

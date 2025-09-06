@@ -196,6 +196,9 @@ importers:
 
   packages/api:
     dependencies:
+      '@otter/db':
+        specifier: workspace:*
+        version: link:../db
       '@trpc/server':
         specifier: ^11.5.0
         version: 11.5.0(typescript@5.9.2)
@@ -226,6 +229,9 @@ importers:
       pg:
         specifier: ^8.16.3
         version: 8.16.3
+      ulid:
+        specifier: ^3.0.1
+        version: 3.0.1
     devDependencies:
       '@types/pg':
         specifier: ^8.15.5
