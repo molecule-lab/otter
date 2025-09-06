@@ -8,7 +8,7 @@
  * - Declare plugin metadata: name `repositories`.
  */
 
-import { createKnowledgeJobsRepository } from "@/src/repositories/knowledge-jobs"
+import { createKnowledgeJobsRepository } from "@/repositories/knowledge-jobs"
 import { FastifyInstance } from "fastify"
 import fp from "fastify-plugin"
 

@@ -15,7 +15,7 @@
 import { createWriteStream } from "fs"
 import fs from "fs/promises"
 import { join } from "path"
-import { createKnowledgeJobsRepository } from "@/src/repositories/knowledge-jobs"
+import { createKnowledgeJobsRepository } from "@/repositories/knowledge-jobs"
 import { MultipartFile } from "@fastify/multipart"
 
 /**

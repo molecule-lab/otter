@@ -6,7 +6,7 @@
     "baseUrl": ".",
     "declaration": true,
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["@types", "src/**/*.ts"]

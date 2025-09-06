@@ -8,7 +8,7 @@
  * - Delegate POST to `createKnowledge` and GET to `fetchKnowledge`.
  */
 
-import { createKnowledge, fetchKnowledge } from "@/src/controllers/knowledge"
+import { createKnowledge, fetchKnowledge } from "@/controllers/knowledge"
 import { FastifyInstance } from "fastify"
 
 const plugin = async (fastify: FastifyInstance) => {

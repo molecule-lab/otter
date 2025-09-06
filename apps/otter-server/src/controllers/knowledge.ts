@@ -8,7 +8,7 @@
  * - Insert job records into `knowledge_jobs` table for background processing.
  */
 
-import { knowledgeJobsService } from "@/src/services/knowledge-jobs"
+import { knowledgeJobsService } from "@/services/knowledge-jobs"
 import { FastifyReply, FastifyRequest } from "fastify"
 
 /**

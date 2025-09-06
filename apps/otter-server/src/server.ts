@@ -11,7 +11,7 @@
  * - Calls `init()` to initialize and launch the server.
  */
 
-import serviceApp from "@/src/app"
+import serviceApp from "@/app"
 import closeWithGrace from "close-with-grace"
 import Fastify from "fastify"
 import fp from "fastify-plugin"

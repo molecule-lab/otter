@@ -7,7 +7,7 @@
  * - Delegate handling to `healthCheckHandler`.
  */
 
-import { healthCheckHandler } from "@/src/controllers/healthz"
+import { healthCheckHandler } from "@/controllers/healthz"
 import { Type } from "@fastify/type-provider-typebox"
 import { FastifyInstance } from "fastify"
 

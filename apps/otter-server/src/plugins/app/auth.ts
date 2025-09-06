@@ -8,7 +8,7 @@
  * - Declare plugin metadata: name `auth`, depends on `database` plugin.
  */
 
-import { auth, createAuth } from "@/src/utils/auth"
+import { auth, createAuth } from "@/utils/auth"
 import { FastifyInstance } from "fastify"
 import fp from "fastify-plugin"
 
