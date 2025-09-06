@@ -1,3 +1,22 @@
+/**
+ * Fastify plugin for database connection and management.
+ *
+ * Responsibilities:
+ * - Create database connection using Drizzle ORM with PostgreSQL.
+ * - Decorate the Fastify instance with `db` property for use across routes and handlers.
+ * - Test database connection on server startup and handle connection errors.
+ * - Provide typed database instance for type-safe database operations.
+ * - Augment Fastify types to expose `fastify.db` with correct typing.
+ *
+ * Dependencies:
+ * - Requires `@fastify/env` plugin to be loaded first for configuration access.
+ * - Uses `@otter/db` package for database connection factory.
+ *
+ * Exports:
+ * - Default Fastify plugin that registers database connection.
+ * - Plugin metadata: name `database`, depends on `@fastify/env`.
+ */
+
 import { createDbConnection, type DatabaseInstance } from "@otter/db"
 import { sql } from "drizzle-orm"
 import { FastifyInstance } from "fastify"
