@@ -2,7 +2,8 @@
   "extends": "fastify-tsconfig",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": ".",
+    "rootDir": "src",
+    "baseUrl": ".",
     "declaration": true,
     "paths": {
       "@/*": ["./*"]
