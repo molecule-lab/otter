@@ -17,15 +17,22 @@ import * as knowledgeSchema from "@/src/schema/knowledge"
 import { drizzle } from "drizzle-orm/node-postgres"
 import { Pool } from "pg"
 
+/**
+ * Creates a configured Drizzle database instance with PostgreSQL connection pool.
+ * @param connectionString - PostgreSQL connection string (e.g., postgresql://user:pass@host:port/db)
+ * @returns Configured Drizzle database instance with all schemas available
+ */
 export function createDbConnection(connectionString: string) {
+  // Create PostgreSQL connection pool for efficient connection management
   const sql = new Pool({
     connectionString: connectionString!,
   })
 
+  // Initialize Drizzle ORM with all schema modules for type-safe database operations
   return drizzle(sql, {
     schema: {
-      ...authSchema,
-      ...knowledgeSchema,
+      ...authSchema, // Authentication and user management tables
+      ...knowledgeSchema, // Knowledge processing and job tables
     },
   })
 }

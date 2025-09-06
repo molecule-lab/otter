@@ -14,6 +14,13 @@
 
 import { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify"
 
+/**
+ * Creates a tRPC context object from Fastify request/response options.
+ * @param options - Fastify context options containing request and response objects
+ * @param options.req - Fastify request object with server instance and headers
+ * @param options.res - Fastify response object for sending replies
+ * @returns Context object containing request and response for tRPC procedures
+ */
 export function createContext({ req, res }: CreateFastifyContextOptions): {
   req: CreateFastifyContextOptions["req"]
   res: CreateFastifyContextOptions["res"]
@@ -21,4 +28,8 @@ export function createContext({ req, res }: CreateFastifyContextOptions): {
   return { req, res }
 }
 
+/**
+ * TypeScript type representing the tRPC context.
+ * Derived from the return type of createContext for type safety.
+ */
 export type Context = Awaited<ReturnType<typeof createContext>>

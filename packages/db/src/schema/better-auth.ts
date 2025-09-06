@@ -17,6 +17,10 @@
 
 import { boolean, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core"
 
+/**
+ * User table for storing user profiles and authentication data.
+ * Includes email verification status and profile information.
+ */
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -30,6 +34,10 @@ export const user = pgTable("user", {
     .notNull(),
 })
 
+/**
+ * Session table for managing user authentication sessions.
+ * Tracks session tokens, expiration, and user context.
+ */
 export const session = pgTable("session", {
   id: text("id").primaryKey(),
   expiresAt: timestamp("expires_at").notNull(),
@@ -45,6 +53,10 @@ export const session = pgTable("session", {
     .references(() => user.id, { onDelete: "cascade" }),
 })
 
+/**
+ * Account table for OAuth provider account linking.
+ * Stores provider-specific tokens and account information.
+ */
 export const account = pgTable("account", {
   id: text("id").primaryKey(),
   accountId: text("account_id").notNull(),
@@ -65,6 +77,10 @@ export const account = pgTable("account", {
     .notNull(),
 })
 
+/**
+ * Verification table for email/phone verification tokens.
+ * Manages temporary tokens for account verification processes.
+ */
 export const verification = pgTable("verification", {
   id: text("id").primaryKey(),
   identifier: text("identifier").notNull(),
@@ -77,6 +93,10 @@ export const verification = pgTable("verification", {
     .notNull(),
 })
 
+/**
+ * API key table for programmatic access with rate limiting.
+ * Manages API keys with configurable rate limits and permissions.
+ */
 export const apikey = pgTable("apikey", {
   id: text("id").primaryKey(),
   name: text("name"),

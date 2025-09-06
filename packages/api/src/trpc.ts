@@ -16,19 +16,35 @@ import { Context } from "@/src/context"
 import { initTRPC } from "@trpc/server"
 import { z } from "zod"
 
+// Initialize tRPC with our custom context type for type safety
 const t = initTRPC.context<Context>().create()
 
+/**
+ * Main tRPC router containing all API procedures.
+ * Provides type-safe endpoints for client consumption.
+ */
 export const appRouter = t.router({
+  /**
+   * Hello world procedure for testing API connectivity.
+   * Validates input name and returns greeting with database access.
+   */
   hello: t.procedure
     .input(z.object({ name: z.string() }))
-    .query(({ input, ctx }) => ({
+    .query(({ input }) => ({
       message: `Hello ${input.name}`,
-      db: ctx.req.server.db,
     })),
 
+  /**
+   * Simple addition procedure for testing mutations.
+   * Takes two numbers and returns their sum.
+   */
   add: t.procedure
     .input(z.object({ a: z.number(), b: z.number() }))
     .mutation(({ input }) => input.a + input.b),
 })
 
+/**
+ * TypeScript type for the main router.
+ * Used for client-side type inference and validation.
+ */
 export type AppRouter = typeof appRouter

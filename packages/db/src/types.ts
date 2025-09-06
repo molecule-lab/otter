@@ -15,6 +15,10 @@
 import { account, apikey, session, user, verification } from "@/src/schema"
 import { NodePgDatabase } from "drizzle-orm/node-postgres"
 
+/**
+ * Type definition representing the complete database schema structure.
+ * Combines all table definitions for type-safe database operations.
+ */
 export type DatabaseSchema = {
   user: typeof user
   account: typeof account
@@ -23,4 +27,8 @@ export type DatabaseSchema = {
   verification: typeof verification
 }
 
+/**
+ * Typed database instance for Drizzle ORM operations.
+ * Provides full type safety for all database queries and mutations.
+ */
 export type DatabaseInstance = NodePgDatabase<DatabaseSchema>

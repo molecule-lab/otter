@@ -13,6 +13,7 @@
 
 import { DatabaseInstance } from "@otter/db"
 
+// Augment Fastify module to include our custom database decorator
 declare module "fastify" {
   interface FastifyInstance {
     db: DatabaseInstance
