@@ -8,6 +8,12 @@
 
 import { FastifyReply, FastifyRequest } from "fastify"
 
+/**
+ * Health check handler that confirms service availability.
+ * @param _ - Fastify request object (unused)
+ * @param reply - Fastify reply object for sending response
+ * @returns Promise that resolves to 200 response with welcome message
+ */
 export const healthCheckHandler = async (
   _: FastifyRequest,
   reply: FastifyReply,

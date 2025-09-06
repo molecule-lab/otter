@@ -18,18 +18,30 @@ import { join } from "path"
 import { createKnowledgeJobsRepository } from "@/src/repositories/knowledge-jobs"
 import { MultipartFile } from "@fastify/multipart"
 
+/**
+ * Creates a knowledge jobs service instance with business logic operations.
+ * @param knowledgeJobsRepository - Repository instance for database operations
+ * @returns Service object with knowledge job processing methods
+ */
 export function knowledgeJobsService(
   knowledgeJobsRepository: ReturnType<typeof createKnowledgeJobsRepository>,
 ) {
   return {
+    /**
+     * Processes uploaded file and creates knowledge job record.
+     * @param file - Multipart file object from request
+     * @param apiKeyId - API key ID that owns the job
+     * @returns Promise that resolves to created knowledge job record
+     */
     async processFile(file: MultipartFile, apiKeyId: string) {
+      // Create uploads directory relative to project root for file storage
       const uploadDir = join(process.cwd(), "..", "..", "__uploads__")
       await fs.mkdir(uploadDir, { recursive: true })
 
-      // Build the file path
+      // Build the file path for local storage
       const filePath = join(uploadDir, file.filename)
 
-      // Write the file to disk
+      // Stream file to disk to avoid loading entire file into memory
       await new Promise((resolve, reject) => {
         const ws = createWriteStream(filePath)
         file?.file.pipe(ws)
@@ -37,7 +49,7 @@ export function knowledgeJobsService(
         ws.on("error", reject)
       })
 
-      // Insert JOB into the
+      // Create database record for background processing job tracking
       return await knowledgeJobsRepository.create({
         apikeyId: apiKeyId || "",
         fileName: file.filename,

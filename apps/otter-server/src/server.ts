@@ -16,8 +16,12 @@ import closeWithGrace from "close-with-grace"
 import Fastify from "fastify"
 import fp from "fastify-plugin"
 
+/**
+ * Configures logger based on environment (interactive vs production).
+ * @returns Logger configuration object with appropriate settings
+ */
 function getLoggerOptions() {
-  // Only if the program is running in an interactive terminal
+  // Use pretty logging only in interactive terminals for development
   if (process.stdout.isTTY) {
     return {
       level: "info",
@@ -31,6 +35,7 @@ function getLoggerOptions() {
     }
   }
 
+  // Silent logging for production environments
   return { level: "silent" }
 }
 
@@ -44,9 +49,14 @@ const app = Fastify({
   },
 })
 
+/**
+ * Initializes and starts the Fastify server with graceful shutdown handling.
+ * @returns Promise that resolves when server is ready and listening
+ */
 async function init() {
   app.register(fp(serviceApp))
 
+  // Handle graceful shutdown with 500ms delay for ongoing requests
   closeWithGrace({ delay: 500 }, async ({ err }) => {
     if (err != null) {
       app.log.error(err)
@@ -58,7 +68,7 @@ async function init() {
   await app.ready()
 
   try {
-    // Start listening.
+    // Start HTTP server on configured port
     await app.listen({ port: app.config.PORT })
   } catch (err) {
     app.log.error(err)

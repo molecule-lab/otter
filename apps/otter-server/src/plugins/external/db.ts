@@ -35,10 +35,10 @@ async function dbPlugin(fastify: FastifyInstance) {
   // Add database to fastify instance
   fastify.decorate("db", db)
 
-  // Add a hook to test database connection on startup
+  // Test database connection on server startup to fail fast if DB is unavailable
   fastify.addHook("onReady", async () => {
     try {
-      // Test the connection using Drizzle's sql helper
+      // Execute simple query to verify database connectivity
       await db.execute(sql`SELECT 1`)
 
       fastify.log.info("Database connected successfully")

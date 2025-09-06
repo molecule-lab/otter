@@ -12,6 +12,7 @@ import { createKnowledge, fetchKnowledge } from "@/src/controllers/knowledge"
 import { FastifyInstance } from "fastify"
 
 const plugin = async (fastify: FastifyInstance) => {
+  // Verify API key for all knowledge endpoints to ensure authenticated access
   fastify.addHook("preHandler", async (request, reply) => {
     const apiKey = await fastify.auth.api.verifyApiKey({
       body: {
@@ -19,14 +20,17 @@ const plugin = async (fastify: FastifyInstance) => {
       },
     })
 
+    // Handle rate limiting from Better Auth
     if (apiKey.error?.code === "RATE_LIMITED") {
       return reply.tooManyRequests()
     }
 
+    // Reject requests without valid API key
     if (!apiKey.valid) {
       return reply.unauthorized()
     }
 
+    // Attach API key ID to request for downstream handlers
     request.apiKeyId = apiKey.key?.id
   })
 

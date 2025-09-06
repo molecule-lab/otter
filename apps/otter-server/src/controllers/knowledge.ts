@@ -11,6 +11,12 @@
 import { knowledgeJobsService } from "@/src/services/knowledge-jobs"
 import { FastifyReply, FastifyRequest } from "fastify"
 
+/**
+ * Handles file upload for knowledge processing.
+ * @param request - Fastify request object containing multipart file data
+ * @param reply - Fastify reply object for sending response
+ * @returns Promise that resolves to success response with job data or error response
+ */
 const createKnowledge = async (
   request: FastifyRequest,
   reply: FastifyReply,
@@ -22,11 +28,12 @@ const createKnowledge = async (
       return reply.badRequest()
     }
 
+    // Process file upload and create background job for knowledge extraction
     const knowledgeJob = await knowledgeJobsService(
       request.server.knowledgeJobsRepository,
     ).processFile(file, request.apiKeyId!)
 
-    // Return to user
+    // Return job details to user for tracking processing status
     return reply.code(200).send({
       message: "Document Added for processing",
       data: {
@@ -42,6 +49,12 @@ const createKnowledge = async (
   }
 }
 
+/**
+ * Placeholder handler for knowledge retrieval functionality.
+ * @param _ - Fastify request object (unused)
+ * @param reply - Fastify reply object for sending response
+ * @returns Promise that resolves to success response with placeholder message
+ */
 const fetchKnowledge = async (_: FastifyRequest, reply: FastifyReply) => {
   return reply.code(200).send({ message: "Fetch Documents" })
 }

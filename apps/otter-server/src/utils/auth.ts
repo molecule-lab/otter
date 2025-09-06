@@ -18,6 +18,11 @@ import { apiKey, bearer } from "better-auth/plugins"
 import { ulid } from "ulid"
 
 // Todo make this accept trusted origins, baseurl and secret
+/**
+ * Creates a configured Better Auth instance with database adapter and plugins.
+ * @param db - Optional database instance for auth data persistence
+ * @returns Configured Better Auth instance with email/password and API key support
+ */
 export function createAuth(db?: DatabaseInstance) {
   return betterAuth({
     trustedOrigins: ["http://localhost:3001"],
