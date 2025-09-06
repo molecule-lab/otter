@@ -1,3 +1,20 @@
+/**
+ * Better Auth database schema definitions.
+ *
+ * Responsibilities:
+ * - Define PostgreSQL tables for user authentication and authorization.
+ * - Create user, session, account, verification, and API key tables.
+ * - Establish foreign key relationships and constraints.
+ * - Provide schema definitions for Better Auth integration.
+ *
+ * Exports:
+ * - `user` - User table with profile and verification fields.
+ * - `session` - User session management table.
+ * - `account` - OAuth provider account linking table.
+ * - `verification` - Email/phone verification tokens table.
+ * - `apikey` - API key management with rate limiting table.
+ */
+
 import { boolean, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core"
 
 export const user = pgTable("user", {

@@ -1,3 +1,17 @@
+/**
+ * Knowledge processing database schema definitions.
+ *
+ * Responsibilities:
+ * - Define PostgreSQL tables for knowledge job processing.
+ * - Create knowledge jobs table with status tracking.
+ * - Establish relationships with API keys for access control.
+ * - Provide schema definitions for document processing workflow.
+ *
+ * Exports:
+ * - `knowledgeJobsStatus` - Enum for job status values.
+ * - `knowledge_jobs` - Table for tracking document processing jobs.
+ */
+
 import { pgEnum, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core"
 import { ulid } from "ulid"
 

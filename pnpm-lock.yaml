@@ -74,9 +74,6 @@ importers:
       '@otter/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@otter/eslint-config':
-        specifier: workspace:*
-        version: link:../../packages/eslint-config
       '@trpc/server':
         specifier: ^11.5.0
         version: 11.5.0(typescript@5.9.2)
