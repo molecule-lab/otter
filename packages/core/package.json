@@ -1,0 +1,29 @@
+{
+  "name": "@otter/core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc  && tsc-alias ",
+    "dev": "concurrently \"tsc --watch\" \"nodemon --watch dist --exec 'tsc-alias'\"",
+    "lint": "eslint src --ext .ts,.js",
+    "lint:fix": "eslint src --ext .ts,.js --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@langchain/textsplitters": "^0.1.0",
+    "@otter/db": "workspace:*",
+    "drizzle-orm": "^0.44.5",
+    "openai": "^5.19.1",
+    "p-limit": "^7.1.1",
+    "pdf-parse": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/pdf-parse": "^1.1.5",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.2"
+  }
+}

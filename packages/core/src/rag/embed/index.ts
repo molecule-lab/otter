@@ -1,0 +1,35 @@
+/**
+ * Text embedding generation for RAG processing.
+ *
+ * Responsibilities:
+ * - Generate vector embeddings for text chunks
+ * - Manage concurrent embedding requests with rate limiting
+ * - Coordinate with AI clients for embedding generation
+ */
+
+import { AIClient } from "@/ai/types"
+import { ChunkedJob, EmbeddedJob } from "@/rag/types"
+import pLimit from "p-limit"
+
+// TODO: Make configurable through environment variables or config
+const limit = pLimit(25)
+
+/**
+ * Generates embeddings for all text chunks using the provided AI client.
+ * Uses concurrency limiting to prevent API rate limit issues.
+ * @param data - Chunked job containing text chunks to embed
+ * @param aiClient - AI client instance for embedding generation
+ * @returns Promise resolving to job with generated embeddings
+ */
+export async function embed(
+  data: ChunkedJob,
+  aiClient: AIClient,
+): Promise<EmbeddedJob> {
+  const embeddings = await Promise.all(
+    data.chunks.list.map(async (chunk) =>
+      limit(async () => await aiClient.createEmbedding(chunk)),
+    ),
+  )
+
+  return { ...data, embeddings }
+}
