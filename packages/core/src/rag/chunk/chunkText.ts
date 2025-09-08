@@ -27,9 +27,15 @@ export const textSplitter = new RecursiveCharacterTextSplitter({
  * @returns Promise resolving to job with chunked text data
  */
 export async function chunkText(data: ParsedJob): Promise<ChunkedJob> {
-  const chunks = await textSplitter.splitText(data.document.text)
+  const chunks = await textSplitter.splitText(data.parsed.text)
   return {
     ...data,
-    chunks: { list: chunks, count: chunks.length },
+    chunks: {
+      // Transform string chunks into structured objects with text property
+      list: chunks.map((chunk) => ({
+        text: chunk,
+      })),
+      count: chunks.length,
+    },
   }
 }

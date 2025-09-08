@@ -9,7 +9,7 @@
 
 import { readFileSync } from "fs"
 import { join } from "path"
-import { KnowledgeJob } from "@/rag/types"
+import { KnowledgeJob, ParsedJob } from "@/rag/types"
 import pdf from "pdf-parse"
 
 /**
@@ -18,9 +18,7 @@ import pdf from "pdf-parse"
  * @param data - Knowledge job containing file path information
  * @returns Promise resolving to job with extracted PDF text
  */
-export async function pdfParse(
-  data: KnowledgeJob,
-): Promise<KnowledgeJob & { document: { text: string } }> {
+export async function pdfParse(data: KnowledgeJob): Promise<ParsedJob> {
   // Construct file path relative to upload directory
   const uploadDir = join(process.cwd(), "..", "..")
   const filePath = join(uploadDir, data.filePath)
@@ -33,6 +31,6 @@ export async function pdfParse(
 
   return {
     ...data,
-    document: { text: pdfData.text },
+    parsed: { text: pdfData.text },
   }
 }

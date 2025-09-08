@@ -21,14 +21,14 @@ export type KnowledgeJob = InferInsertModel<typeof knowledge_jobs>
  * Knowledge job after document parsing stage.
  * Contains the extracted text content from the original document.
  */
-export type ParsedJob = KnowledgeJob & { document: { text: string } }
+export type ParsedJob = KnowledgeJob & { parsed: { text: string } }
 
 /**
  * Knowledge job after text chunking stage.
  * Contains the document split into manageable chunks for processing.
  */
 export type ChunkedJob = ParsedJob & {
-  chunks: { list: Array<string>; count: number }
+  chunks: { list: Array<{ text: string }>; count: number }
 }
 
 /**
@@ -36,5 +36,11 @@ export type ChunkedJob = ParsedJob & {
  * Contains vector embeddings for each text chunk.
  */
 export type EmbeddedJob = ChunkedJob & {
-  embeddings: Array<OpenAI.Embeddings.CreateEmbeddingResponse>
+  chunks: {
+    list: Array<{
+      text: string
+      embedding: OpenAI.Embeddings.CreateEmbeddingResponse
+    }>
+    count: number
+  }
 }

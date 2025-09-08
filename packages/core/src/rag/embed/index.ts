@@ -25,11 +25,17 @@ export async function embed(
   data: ChunkedJob,
   aiClient: AIClient,
 ): Promise<EmbeddedJob> {
-  const embeddings = await Promise.all(
+  // Process all chunks concurrently with rate limiting
+  const embeddedChunks = await Promise.all(
     data.chunks.list.map(async (chunk) =>
-      limit(async () => await aiClient.createEmbedding(chunk)),
+      limit(async () => ({
+        ...chunk,
+        // Generate embedding for the chunk text
+        embedding: await aiClient.createEmbedding(chunk.text),
+      })),
     ),
   )
 
-  return { ...data, embeddings }
+  // Return job with embedded chunks, preserving original structure
+  return { ...data, chunks: { ...data.chunks, list: embeddedChunks } }
 }
