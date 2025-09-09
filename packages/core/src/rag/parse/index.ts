@@ -1,27 +1,32 @@
 /**
- * Document parsing orchestration for different file types.
+ * Document parsing orchestration for different source types.
  *
  * Responsibilities:
- * - Route parsing operations based on file type
+ * - Route parsing operations based on source type
  * - Coordinate document text extraction strategies
- * - Handle file type validation and error cases
+ * - Handle source type validation and error cases
  */
 
 import { pdfParse } from "@/rag/parse/pdfParser"
-import { KnowledgeJob, ParsedJob } from "@/rag/types"
+import { ParsedJob } from "@/rag/types"
+import { KnowledgeJobWithSource } from "@otter/db/types"
 
 /**
  * Parses document content and extracts text for further processing.
- * Routes to appropriate parser based on file type.
- * @param data - Knowledge job with file metadata
+ * Routes to appropriate parser based on source type.
+ * Currently supports file-based sources with PDF parsing.
+ * @param data - Knowledge job with source metadata
  * @returns Promise resolving to job with extracted document text
- * @throws Error if file type is not supported
+ * @throws Error if source type is not supported
  */
-export async function parse(data: KnowledgeJob): Promise<ParsedJob> {
-  switch (data.fileType) {
-    case "application/pdf":
-      return await pdfParse(data)
+export async function parse(data: KnowledgeJobWithSource): Promise<ParsedJob> {
+  switch (data.source.sourceType) {
+    // Todo Implement Mime type based logic here
+    case "file":
+      return pdfParse(data)
     default:
-      throw new Error(`No parser found for the file type ${data.fileType}`)
+      throw new Error(
+        `No parser found for the file type ${data.source.sourceType}`,
+      )
   }
 }

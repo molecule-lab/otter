@@ -3,41 +3,36 @@
  *
  * Responsibilities:
  * - Coordinate the complete RAG processing workflow
- * - Process multiple knowledge jobs through parse, chunk, and embed stages
- * - Handle batch processing of document jobs
+ * - Process a single knowledge job through parse, chunk, and embed stages
+ * - Handle sequential processing of document jobs
  */
 
 import { AIClient } from "@/ai/types"
 import { chunk } from "@/rag/chunk"
 import { embed } from "@/rag/embed"
 import { parse } from "@/rag/parse"
-import { EmbeddedJob, KnowledgeJob } from "@/rag/types"
+import { EmbeddedJob } from "@/rag/types"
+import { KnowledgeJobWithSource } from "@otter/db/types"
 
 /**
- * Processes an array of knowledge jobs through the complete RAG pipeline.
- * Executes parsing, chunking, and embedding stages for each job.
- * @param data - Array of knowledge jobs to process
+ * Processes a single knowledge job through the complete RAG pipeline.
+ * Executes parsing, chunking, and embedding stages sequentially.
+ * @param data - Knowledge job to process
  * @param ai - AI client instance for embedding generation
- * @returns Promise resolving to array of fully processed embedded jobs
+ * @returns Promise resolving to fully processed embedded job
  */
 export async function processKnowledgeJob(
-  data: Array<KnowledgeJob>,
+  data: KnowledgeJobWithSource,
   ai: AIClient,
-): Promise<Array<EmbeddedJob>> {
-  // Parse all documents to extract text content
-  const processedJobs = await Promise.all(
-    data.map(async (job) => await parse(job)),
-  )
+): Promise<EmbeddedJob> {
+  // Parse document to extract text content
+  const processedJob = await parse(data)
 
-  // Chunk all parsed documents into manageable segments
-  const chunkedJobs = await Promise.all(
-    processedJobs.map(async (job) => await chunk(job)),
-  )
+  // Chunk parsed document into manageable segments
+  const chunkedJob = await chunk(processedJob)
 
   // Generate embeddings for all chunks
-  const embeddedJobs = await Promise.all(
-    chunkedJobs.map(async (job) => await embed(job, ai)),
-  )
+  const embeddedJob = await embed(chunkedJob, ai)
 
-  return embeddedJobs
+  return embeddedJob
 }

@@ -9,19 +9,22 @@
 
 import { readFileSync } from "fs"
 import { join } from "path"
-import { KnowledgeJob, ParsedJob } from "@/rag/types"
+import { ParsedJob } from "@/rag/types"
+import { KnowledgeJobWithSource } from "@otter/db/types"
 import pdf from "pdf-parse"
 
 /**
  * Parses PDF file and extracts text content.
  * Reads PDF from file system and uses pdf-parse library for text extraction.
- * @param data - Knowledge job containing file path information
+ * @param data - Knowledge job containing source metadata with file location
  * @returns Promise resolving to job with extracted PDF text
  */
-export async function pdfParse(data: KnowledgeJob): Promise<ParsedJob> {
+export async function pdfParse(
+  data: KnowledgeJobWithSource,
+): Promise<ParsedJob> {
   // Construct file path relative to upload directory
   const uploadDir = join(process.cwd(), "..", "..")
-  const filePath = join(uploadDir, data.filePath)
+  const filePath = join(uploadDir, data.source.location)
 
   // Read PDF file from filesystem
   const dataBuffer = readFileSync(filePath)

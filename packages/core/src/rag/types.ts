@@ -7,21 +7,14 @@
  * - Enable progressive enhancement of job data through processing stages
  */
 
-import { knowledge_jobs } from "@otter/db/schema"
-import { InferInsertModel } from "drizzle-orm"
+import { KnowledgeJobWithSource } from "@otter/db/types"
 import OpenAI from "openai"
-
-/**
- * Base knowledge job type derived from database schema.
- * Represents the initial state of a document processing job.
- */
-export type KnowledgeJob = InferInsertModel<typeof knowledge_jobs>
 
 /**
  * Knowledge job after document parsing stage.
  * Contains the extracted text content from the original document.
  */
-export type ParsedJob = KnowledgeJob & { parsed: { text: string } }
+export type ParsedJob = KnowledgeJobWithSource & { parsed: { text: string } }
 
 /**
  * Knowledge job after text chunking stage.
