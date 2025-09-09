@@ -1,37 +1,61 @@
 /**
- * This plugins helps to check environment variables.
+ * Environment configuration plugin for the Otter server.
+ *
+ * Responsibilities:
+ * - Validate and provide access to environment variables.
+ * - Configure database connection, AI provider settings, and server port.
+ * - Ensure required environment variables are present at startup.
+ * - Provide type-safe configuration access through Fastify instance.
  *
  * @see {@link https://github.com/fastify/fastify-env}
  */
 
 import env from "@fastify/env"
 
+/**
+ * Fastify instance configuration interface.
+ * Extends FastifyInstance to include typed configuration properties.
+ */
 declare module "fastify" {
   export interface FastifyInstance {
     config: {
       PORT: number
-      SECRET: string
       DB_CONNECTION_URL: string
+      AI_PROVIDER: "openai"
+      AI_PROVIDER_API_KEY: string
     }
   }
 }
 
+/**
+ * Environment variable validation schema.
+ * Defines required and optional environment variables with their types and constraints.
+ */
 const schema = {
   type: "object",
-  required: ["SECRET", "DB_CONNECTION_URL"],
+  required: ["DB_CONNECTION_URL", "AI_PROVIDER", "AI_PROVIDER_API_KEY"],
   properties: {
     PORT: {
       type: "string",
       default: 3000,
     },
-    SECRET: {
+    DB_CONNECTION_URL: {
       type: "string",
     },
-    DB_CONNECTION_URL: {
+    AI_PROVIDER: {
+      type: "string",
+      enum: ["openai"],
+    },
+    AI_PROVIDER_API_KEY: {
       type: "string",
     },
   },
 }
+
+/**
+ * Fastify environment plugin configuration.
+ * Configures environment variable loading, validation, and Fastify instance decoration.
+ */
 export const autoConfig = {
   // Decorate Fastify instance with `config` key
   // Optional, default: 'config'

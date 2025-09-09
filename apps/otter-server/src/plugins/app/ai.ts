@@ -2,7 +2,7 @@
  * Fastify plugin to provide AI client service to the app layer.
  *
  * Responsibilities:
- * - Create an AI client instance using the core package factory.
+ * - Create an AI client instance using the core package factory with environment configuration.
  * - Decorate the Fastify instance with `ai` for use across routes and handlers.
  * - Augment Fastify types to expose `fastify.ai` with correct typing.
  * - Declare plugin metadata: name `ai`.
@@ -20,11 +20,14 @@ declare module "fastify" {
 
 /**
  * AI plugin that creates and registers AI client with Fastify instance.
+ * Uses environment configuration for AI provider and API key.
  * @param fastify - Fastify instance to decorate with AI client
  */
 async function aiPlugin(fastify: FastifyInstance) {
-  // TODO: Make API key configurable through environment variables
-  const aiClient = createAIClient("openai", "dummy-key")
+  const aiClient = createAIClient(
+    fastify.config.AI_PROVIDER,
+    fastify.config.AI_PROVIDER_API_KEY,
+  )
 
   fastify.decorate("ai", aiClient)
 }
