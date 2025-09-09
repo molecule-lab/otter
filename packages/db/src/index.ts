@@ -12,4 +12,3 @@
  */
 
 export * from "./createDbConnection"
-export type { DatabaseSchema, DatabaseInstance } from "./types"

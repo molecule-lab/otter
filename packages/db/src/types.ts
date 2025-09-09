@@ -12,7 +12,16 @@
  * - `DatabaseInstance` - Typed database instance for Drizzle ORM operations.
  */
 
-import { account, apikey, session, user, verification } from "@/schema"
+import {
+  account,
+  apikey,
+  knowledgeJobs,
+  session,
+  sources,
+  user,
+  verification,
+} from "@/schema"
+import { InferInsertModel } from "drizzle-orm"
 import { NodePgDatabase } from "drizzle-orm/node-postgres"
 
 /**
@@ -25,6 +34,8 @@ export type DatabaseSchema = {
   apikey: typeof apikey
   session: typeof session
   verification: typeof verification
+  knowledgeJobs: typeof knowledgeJobs
+  sources: typeof sources
 }
 
 /**
@@ -32,3 +43,21 @@ export type DatabaseSchema = {
  * Provides full type safety for all database queries and mutations.
  */
 export type DatabaseInstance = NodePgDatabase<DatabaseSchema>
+
+/**
+ * Type for inserting new knowledge job records.
+ * Represents the data structure for creating knowledge processing jobs.
+ */
+export type KnowledgeJob = InferInsertModel<typeof knowledgeJobs>
+
+/**
+ * Type for inserting new source records.
+ * Represents the data structure for creating document source entries.
+ */
+export type Source = InferInsertModel<typeof sources>
+
+/**
+ * Combined type that includes knowledge job data with associated source information.
+ * Used for operations that require both job and source data together.
+ */
+export type KnowledgeJobWithSource = KnowledgeJob & { source: Source }
