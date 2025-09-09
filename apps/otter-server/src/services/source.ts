@@ -42,10 +42,10 @@ export function sourceService(
       const filePath = join(uploadDir, file.filename)
 
       // Stream file to disk to avoid loading entire file into memory
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         const ws = createWriteStream(filePath)
         file?.file.pipe(ws)
-        ws.on("finish", resolve)
+        ws.on("finish", () => resolve())
         ws.on("error", reject)
       })
 
