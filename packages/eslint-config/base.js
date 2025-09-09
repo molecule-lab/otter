@@ -28,6 +28,16 @@ export const config = [
         { allowSameFolder: false, rootDir: "." },
       ],
       "unused-imports/no-unused-imports": "error",
+      "no-return-await": "error",
+      "no-console": "error",
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "ReturnStatement > MemberExpression > AwaitExpression",
+          message:
+            "Avoid returning (await ...)[0]. Destructure result instead.",
+        },
+      ],
     },
   },
   {
