@@ -5,6 +5,7 @@
     "rootDir": "src",
     "baseUrl": ".",
     "declaration": true,
+    "lib": ["ESNext", "DOM"],
     "paths": {
       "@/*": ["./src/*"]
     }

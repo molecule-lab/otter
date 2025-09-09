@@ -17,7 +17,6 @@ import fastifyAutoload from "@fastify/autoload"
 import { appRouter, createContext } from "@otter/api"
 import { fastifyTRPCPlugin } from "@trpc/server/adapters/fastify"
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
-import { Headers, Request } from "node-fetch"
 
 export default async function serviceApp(
   fastify: FastifyInstance,
