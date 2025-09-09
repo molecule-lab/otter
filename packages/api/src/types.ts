@@ -11,7 +11,7 @@
  * - Module augmentation for Fastify interface with database property.
  */
 
-import { DatabaseInstance } from "@otter/db"
+import { DatabaseInstance } from "@otter/db/types"
 
 // Augment Fastify module to include our custom database decorator
 declare module "fastify" {

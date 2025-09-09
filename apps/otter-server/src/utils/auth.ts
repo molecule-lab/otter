@@ -10,8 +10,8 @@
  *   - `createAuth(db?)`: primary factory to construct configured auth.
  */
 
-import { DatabaseInstance } from "@otter/db"
 import { account, apikey, session, user, verification } from "@otter/db/schema"
+import { DatabaseInstance } from "@otter/db/types"
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { apiKey, bearer } from "better-auth/plugins"

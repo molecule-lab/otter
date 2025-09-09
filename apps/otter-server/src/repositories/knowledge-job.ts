@@ -8,32 +8,50 @@
  * - Return typed results using Drizzle ORM with proper error handling.
  *
  * Exports:
- * - `createKnowledgeJobsRepository(fastify)` - Factory function that creates a repository instance
+ * - `createKnowledgeJobRepository(fastify)` - Factory function that creates a repository instance
  *   for knowledge job database operations.
  */
 
-import { knowledge_jobs } from "@otter/db/schema"
-import { eq, InferInsertModel } from "drizzle-orm"
-import { FastifyInstance } from "fastify"
-
-type KnowledgeJob = InferInsertModel<typeof knowledge_jobs>
+import { knowledgeJobs, sources } from "@otter/db/schema"
+import { DatabaseInstance, KnowledgeJob } from "@otter/db/types"
+import { eq, getTableColumns } from "drizzle-orm"
 
 /**
  * Creates a knowledge jobs repository instance for database operations.
- * @param fastify - Fastify instance with database connection
+ * @param db - Database instance for data persistence
  * @returns Repository object with CRUD operations for knowledge jobs
  */
-function createKnowledgeJobsRepository(fastify: FastifyInstance) {
-  const db = fastify.db
-
+function createKnowledgeJobRepository(db: DatabaseInstance) {
   return {
     /**
      * Creates a new knowledge job record in the database.
      * @param knowledgeJob - Knowledge job data to insert
      * @returns Promise that resolves to array of created job records
      */
-    async create(knowledgeJob: KnowledgeJob) {
-      return db.insert(knowledge_jobs).values(knowledgeJob).returning()
+    async createOne(knowledgeJob: KnowledgeJob) {
+      const [created] = await db
+        .insert(knowledgeJobs)
+        .values(knowledgeJob)
+        .returning()
+
+      return created
+    },
+
+    /**
+     * Creates a new knowledge job and immediately retrieves it with associated source data.
+     * @param knowledgeJob - Knowledge job data to insert
+     * @returns Promise that resolves to job record with embedded source information
+     */
+    async createOneWithSource(knowledgeJob: KnowledgeJob) {
+      const job = await this.createOne(knowledgeJob)
+
+      const [jobWithSource] = await db
+        .select({ ...getTableColumns(knowledgeJobs), source: sources })
+        .from(knowledgeJobs)
+        .innerJoin(sources, eq(knowledgeJobs.sourceId, sources.id))
+        .where(eq(knowledgeJobs.id, job.id))
+
+      return jobWithSource
     },
 
     /**
@@ -44,9 +62,9 @@ function createKnowledgeJobsRepository(fastify: FastifyInstance) {
      */
     async update(id: string, changes: Partial<KnowledgeJob>) {
       return db
-        .update(knowledge_jobs)
+        .update(knowledgeJobs)
         .set(changes)
-        .where(eq(knowledge_jobs.id, id))
+        .where(eq(knowledgeJobs.id, id))
         .returning()
     },
 
@@ -72,4 +90,4 @@ function createKnowledgeJobsRepository(fastify: FastifyInstance) {
   }
 }
 
-export { createKnowledgeJobsRepository }
+export { createKnowledgeJobRepository }

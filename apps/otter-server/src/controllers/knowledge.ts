@@ -2,20 +2,21 @@
  * Knowledge controllers for document processing.
  *
  * Responsibilities:
- * - `createKnowledge`: Handle file uploads, save to disk, and create processing jobs.
+ * - `createKnowledge`: Handle file uploads, create source records, and process through RAG pipeline.
  * - `fetchKnowledge`: Placeholder for document retrieval functionality.
- * - Manage file storage in `__uploads__` directory with proper error handling.
- * - Insert job records into `knowledge_jobs` table for background processing.
+ * - Coordinate between source service and knowledge job service for complete processing.
+ * - Handle file validation and error responses for document processing workflow.
  */
 
-import { knowledgeJobsService } from "@/services/knowledge-jobs"
+import { knowledgeJobService } from "@/services/knowledge-job"
+import { sourceService } from "@/services/source"
 import { FastifyReply, FastifyRequest } from "fastify"
 
 /**
- * Handles file upload for knowledge processing.
+ * Handles file upload and processes through complete RAG pipeline.
  * @param request - Fastify request object containing multipart file data
  * @param reply - Fastify reply object for sending response
- * @returns Promise that resolves to success response with job data or error response
+ * @returns Promise that resolves to success response with processing results or error response
  */
 const createKnowledge = async (
   request: FastifyRequest,
@@ -28,16 +29,25 @@ const createKnowledge = async (
       return reply.badRequest()
     }
 
+    if (file?.mimetype !== "application/pdf") {
+      return reply.badRequest("Only PDF files are allowed")
+    }
+
+    const source = await sourceService(
+      request.server.sourceRepository,
+    ).createSource(file, request.apiKeyId!)
+
     // Process file upload and create background job for knowledge extraction
-    const knowledgeJob = await knowledgeJobsService(
-      request.server.knowledgeJobsRepository,
-    ).processFile(file, request.apiKeyId!)
+    const knowledgeJob = await knowledgeJobService(
+      request.server.knowledgeJobRepository,
+      request.server.ai,
+    ).processSource(source)
 
     // Return job details to user for tracking processing status
     return reply.code(200).send({
       message: "Document Added for processing",
       data: {
-        knowledgeJob,
+        ...knowledgeJob,
       },
     })
   } catch (error) {

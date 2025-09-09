@@ -17,7 +17,8 @@
  * - Plugin metadata: name `database`, depends on `@fastify/env`.
  */
 
-import { createDbConnection, type DatabaseInstance } from "@otter/db"
+import { createDbConnection } from "@otter/db"
+import { DatabaseInstance } from "@otter/db/types"
 import { sql } from "drizzle-orm"
 import { FastifyInstance } from "fastify"
 import fp from "fastify-plugin"
