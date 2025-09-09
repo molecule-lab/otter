@@ -3,9 +3,10 @@
  *
  * Responsibilities:
  * - Validate and provide access to environment variables.
- * - Configure database connection, AI provider settings, and server port.
+ * - Configure database connection, AI provider settings, server port, and rate limiting.
  * - Ensure required environment variables are present at startup.
  * - Provide type-safe configuration access through Fastify instance.
+ * - Support configurable rate limiting via MAX_REQUEST_PER_MINUTE environment variable.
  *
  * @see {@link https://github.com/fastify/fastify-env}
  */
@@ -23,6 +24,7 @@ declare module "fastify" {
       DB_CONNECTION_URL: string
       AI_PROVIDER: "openai"
       AI_PROVIDER_API_KEY: string
+      MAX_REQUEST_PER_MINUTE: number
     }
   }
 }
@@ -30,13 +32,19 @@ declare module "fastify" {
 /**
  * Environment variable validation schema.
  * Defines required and optional environment variables with their types and constraints.
+ *
+ * Configuration includes:
+ * - Server settings (PORT)
+ * - Database connection (DB_CONNECTION_URL)
+ * - AI provider configuration (AI_PROVIDER, AI_PROVIDER_API_KEY)
+ * - Rate limiting configuration (MAX_REQUEST_PER_MINUTE)
  */
 const schema = {
   type: "object",
   required: ["DB_CONNECTION_URL", "AI_PROVIDER", "AI_PROVIDER_API_KEY"],
   properties: {
     PORT: {
-      type: "string",
+      type: "number",
       default: 3000,
     },
     DB_CONNECTION_URL: {
@@ -48,6 +56,12 @@ const schema = {
     },
     AI_PROVIDER_API_KEY: {
       type: "string",
+    },
+    MAX_REQUEST_PER_MINUTE: {
+      type: "number",
+      default: 100,
+      description:
+        "Maximum number of requests allowed per minute for rate limiting",
     },
   },
 }
