@@ -11,8 +11,7 @@ import { AIClient } from "@/ai/types"
 import { ChunkedJob, EmbeddedJob } from "@/rag/types"
 import pLimit from "p-limit"
 
-// TODO: Make configurable through environment variables or config
-const limit = pLimit(25)
+const limit = pLimit(parseInt(process.env.MAX_PARALLEL_AI_CALLS || "25"))
 
 /**
  * Generates embeddings for all text chunks using the provided AI client.

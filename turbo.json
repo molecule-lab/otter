@@ -18,5 +18,5 @@
       "persistent": true
     }
   },
-  "globalEnv": ["PORT", "CHUNK_SIZE", "CHUNK_OVERLAP"]
+  "globalEnv": ["PORT", "CHUNK_SIZE", "CHUNK_OVERLAP", "MAX_PARALLEL_AI_CALLS"]
 }
