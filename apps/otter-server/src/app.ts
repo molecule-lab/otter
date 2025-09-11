@@ -84,30 +84,6 @@ export default async function serviceApp(
     options: { ...opts },
   })
 
-  fastify.setErrorHandler((err, request, reply) => {
-    fastify.log.error(
-      {
-        err,
-        request: {
-          method: request.method,
-          url: request.url,
-          query: request.query,
-          params: request.params,
-        },
-      },
-      "Unhandled error occurred",
-    )
-
-    reply.code(err.statusCode ?? 500)
-
-    let message = "Internal Server Error"
-    if (err.statusCode && err.statusCode < 500) {
-      message = err.message
-    }
-
-    return { message }
-  })
-
   fastify.setNotFoundHandler(
     {
       preHandler: fastify.rateLimit({
