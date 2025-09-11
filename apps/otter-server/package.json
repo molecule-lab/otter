@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "pnpm run build && fastify start -l info dist/app.js",
     "build": "tsc && tsc-alias",
     "watch": "tsc -w",
     "dev": "nodemon --exec tsx src/server.ts",
