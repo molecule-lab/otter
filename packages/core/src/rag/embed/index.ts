@@ -9,9 +9,16 @@
 
 import { AIClient } from "@/ai/types"
 import { ChunkedJob, EmbeddedJob } from "@/rag/types"
-import pLimit from "p-limit"
 
-const limit = pLimit(parseInt(process.env.MAX_PARALLEL_AI_CALLS || "25"))
+// Dynamic import for ES module
+let pLimit: (concurrency: number) => <T>(fn: () => Promise<T>) => Promise<T>
+const getLimit = async () => {
+  if (!pLimit) {
+    const module = await import("p-limit")
+    pLimit = module.default
+  }
+  return pLimit(parseInt(process.env.MAX_PARALLEL_AI_CALLS || "25"))
+}
 
 /**
  * Generates embeddings for all text chunks using the provided AI client.
@@ -24,6 +31,9 @@ export async function embed(
   data: ChunkedJob,
   aiClient: AIClient,
 ): Promise<EmbeddedJob> {
+  // Get the limit function dynamically
+  const limit = await getLimit()
+
   // Process all chunks concurrently with rate limiting
   const embeddedChunks = await Promise.all(
     data.chunks.list.map(async (chunk) =>
