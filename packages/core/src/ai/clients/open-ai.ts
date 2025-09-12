@@ -12,15 +12,23 @@ import OpenAI from "openai"
 
 /**
  * Creates an OpenAI client instance with embedding capabilities.
- * @param apiKey - OpenAI API key for authentication
- * @returns AIClient implementation using OpenAI services
+ *
+ * This factory function initializes the OpenAI SDK and returns a configured
+ * AIClient implementation that can be used throughout the RAG pipeline.
+ *
+ * @param apiKey - OpenAI API key for authentication (starts with 'sk-')
+ * @returns AIClient implementation using OpenAI services with text-embedding-3-small model
+ * @throws Error if API key is invalid or API request fails
  */
 export function createOpenAIClient(apiKey: string): AIClient {
+  // Initialize OpenAI client with provided API key
   const client = new OpenAI({
     apiKey,
   })
 
   return {
+    provider: "openai",
+    embeddingModel: "text-embedding-3-small",
     /**
      * Creates embeddings using OpenAI's text-embedding-3-small model.
      * @param input - Text to generate embeddings for

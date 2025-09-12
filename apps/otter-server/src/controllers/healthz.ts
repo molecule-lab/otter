@@ -19,6 +19,6 @@ export const healthCheckHandler = async (
   reply: FastifyReply,
 ) => {
   reply.code(200).send({
-    message: "Welcome to the official fastify demo!",
+    message: "Welcome to Otter",
   })
 }

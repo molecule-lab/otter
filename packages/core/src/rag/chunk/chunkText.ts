@@ -18,6 +18,7 @@
 
 import { ChunkedJob, ParsedJob } from "@/rag/types"
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters"
+import { ulid } from "ulid"
 
 /**
  * Configured text splitter with environment-configurable parameters for RAG processing.
@@ -37,6 +38,8 @@ export const textSplitter = new RecursiveCharacterTextSplitter({
   chunkSize: parseInt(process.env.CHUNK_SIZE || "800"), // Maximum characters per chunk
   chunkOverlap: parseInt(process.env.CHUNK_OVERLAP || "80"), // Overlap between chunks for context preservation
 })
+
+textSplitter.name = "recursive-character-text-splitter"
 
 /**
  * Splits document text into chunks using the configured text splitter.
@@ -62,8 +65,12 @@ export async function chunkText(data: ParsedJob): Promise<ChunkedJob> {
       // Transform string chunks into structured objects with text property
       // This format is required for downstream embedding and retrieval operations
       list: chunks.map((chunk) => ({
+        id: ulid(),
         text: chunk,
       })),
+      chunkSize: textSplitter.chunkSize,
+      chunkOverlap: textSplitter.chunkOverlap,
+      splitter: textSplitter.name,
       count: chunks.length,
     },
   }

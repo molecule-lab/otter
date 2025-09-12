@@ -42,8 +42,9 @@ async function errorHandler(fastify: FastifyInstance) {
 
     // Return consistent error response structure
     return {
+      status: "error",
       statusCode,
-      code: err.code || "INTERNAL_ERROR",
+      code: err.cause || err.code || "INTERNAL_ERROR",
       message: err.message || "Internal Server Error",
       errorTrace: err.stack,
     }
