@@ -2,61 +2,70 @@
  * Knowledge controllers for document processing.
  *
  * Responsibilities:
- * - `createKnowledge`: Handle file uploads, create source records, and process through RAG pipeline.
+ * - `createKnowledge`: Handle file uploads, create source records, and process through complete RAG pipeline.
  * - `fetchKnowledge`: Placeholder for document retrieval functionality.
- * - Coordinate between source service and knowledge job service for complete processing.
- * - Handle file validation and error responses for document processing workflow.
+ * - Coordinate between source service, knowledge job service, and knowledge item service for complete processing.
+ * - Handle file validation (PDF only) and error responses for document processing workflow.
+ * - Process documents synchronously through parse, chunk, embed, and store operations.
  */
 
+import { KnowledgeItemService } from "@/services/knowledge-item"
 import { knowledgeJobService } from "@/services/knowledge-job"
 import { sourceService } from "@/services/source"
 import { FastifyReply, FastifyRequest } from "fastify"
 
 /**
- * Handles file upload and processes through complete RAG pipeline.
+ * Handles file upload and processes through complete RAG pipeline synchronously.
+ * Validates PDF files, creates source record, processes through parse/chunk/embed stages,
+ * and stores the final knowledge item with chunks and embeddings.
  * @param request - Fastify request object containing multipart file data
  * @param reply - Fastify reply object for sending response
- * @returns Promise that resolves to success response with processing results or error response
+ * @returns Promise that resolves to success response with knowledge item data or error response
  */
 const createKnowledge = async (
   request: FastifyRequest,
   reply: FastifyReply,
 ) => {
-  try {
-    const file = await request.file()
+  const file = await request.file()
 
-    if (!file) {
-      return reply.badRequest()
-    }
-
-    if (file?.mimetype !== "application/pdf") {
-      return reply.badRequest("Only PDF files are allowed")
-    }
-
-    const source = await sourceService(
-      request.server.sourceRepository,
-    ).createSource(file, request.apiKeyId!)
-
-    // Process file upload and create background job for knowledge extraction
-    const knowledgeJob = await knowledgeJobService(
-      request.server.knowledgeJobRepository,
-      request.server.ai,
-    ).processSource(source)
-
-    // Return job details to user for tracking processing status
-    return reply.code(200).send({
-      message: "Document Added for processing",
-      data: {
-        ...knowledgeJob,
-      },
-    })
-  } catch (error) {
-    request.server.log.error(`"Document Upload Error:", ${error}`)
-    reply.status(500).send({
-      error: "Document Upload  error",
-      code: "Document Upload Failed",
-    })
+  if (!file) {
+    return reply.badRequest()
   }
+
+  if (file?.mimetype !== "application/pdf") {
+    return reply.badRequest("Only PDF files are allowed")
+  }
+
+  // Create source record and store file on disk
+  const source = await sourceService(
+    request.server.repositories.source,
+  ).createSource(file, request.apiKeyId!)
+
+  // Create knowledge job and process through complete RAG pipeline
+  const knowledgeJobServiceInstance = knowledgeJobService(
+    request.server.repositories.knowledgeJob,
+    request.server.ai,
+  )
+
+  // Create knowledge job record in database with source association
+  const knowledgeJob = await knowledgeJobServiceInstance.createJob(source)
+
+  // Process job through parse, chunk, and embed stages
+  const processedJob =
+    await knowledgeJobServiceInstance.processJob(knowledgeJob)
+
+  // Store final knowledge item with chunks and embeddings in database
+  const knowledgeItem = await KnowledgeItemService(
+    request.server.db,
+  ).storeKnowledge(processedJob)
+
+  // Return knowledge item details to user (processing is complete)
+  return reply.code(200).send({
+    message: "Document processed and stored successfully",
+    data: {
+      knowledgeItem,
+    },
+  })
 }
 
 /**

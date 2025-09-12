@@ -8,24 +8,18 @@
  * - Declare plugin metadata: name `repositories`.
  */
 
-import { createKnowledgeJobRepository } from "@/repositories/knowledge-job"
-import { createSourceRepository } from "@/repositories/source"
+import { createRepositories } from "@/repositories"
 import { FastifyInstance } from "fastify"
 import fp from "fastify-plugin"
 
 declare module "fastify" {
   export interface FastifyInstance {
-    knowledgeJobRepository: ReturnType<typeof createKnowledgeJobRepository>
-    sourceRepository: ReturnType<typeof createSourceRepository>
+    repositories: ReturnType<typeof createRepositories>
   }
 }
 
 function repositories(fastify: FastifyInstance) {
-  fastify.decorate(
-    "knowledgeJobRepository",
-    createKnowledgeJobRepository(fastify.db),
-  )
-  fastify.decorate("sourceRepository", createSourceRepository(fastify.db))
+  fastify.decorate("repositories", createRepositories(fastify.db))
 }
 
 export default fp(repositories, { name: "repositories" })

@@ -44,3 +44,5 @@ otter-ui
 
 __uploads__
 .local
+
+.cursor

@@ -15,6 +15,9 @@
 import {
   account,
   apikey,
+  knowledgeChunks,
+  knowledgeEmbeddings,
+  knowledgeItems,
   knowledgeJobs,
   session,
   sources,
@@ -36,6 +39,9 @@ export type DatabaseSchema = {
   verification: typeof verification
   knowledgeJobs: typeof knowledgeJobs
   sources: typeof sources
+  knowledgeItems: typeof knowledgeItems
+  knowledgeChunks: typeof knowledgeChunks
+  knowledgeEmbeddings: typeof knowledgeEmbeddings
 }
 
 /**
@@ -61,3 +67,21 @@ export type Source = InferInsertModel<typeof sources>
  * Used for operations that require both job and source data together.
  */
 export type KnowledgeJobWithSource = KnowledgeJob & { source: Source }
+
+/**
+ * Type for inserting new knowledge item records.
+ * Represents the data structure for creating knowledge items with processing metadata.
+ */
+export type KnowledgeItem = InferInsertModel<typeof knowledgeItems>
+
+/**
+ * Type for inserting new knowledge chunk records.
+ * Represents the data structure for creating text chunks from processed documents.
+ */
+export type KnowledgeChunk = InferInsertModel<typeof knowledgeChunks>
+
+/**
+ * Type for inserting new knowledge embedding records.
+ * Represents the data structure for creating vector embeddings for text chunks.
+ */
+export type KnowledgeEmbedding = InferInsertModel<typeof knowledgeEmbeddings>

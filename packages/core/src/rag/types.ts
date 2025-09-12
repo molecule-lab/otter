@@ -9,6 +9,7 @@
 
 import { KnowledgeJobWithSource } from "@otter/db/types"
 import OpenAI from "openai"
+import { ulid } from "ulid"
 
 /**
  * Knowledge job after document parsing stage.
@@ -21,19 +22,32 @@ export type ParsedJob = KnowledgeJobWithSource & { parsed: { text: string } }
  * Contains the document split into manageable chunks for processing.
  */
 export type ChunkedJob = ParsedJob & {
-  chunks: { list: Array<{ text: string }>; count: number }
+  chunks: {
+    list: Array<{ text: string; id: ReturnType<typeof ulid> }>
+    count: number
+    chunkOverlap: number
+    chunkSize: number
+    splitter?: string
+  }
 }
 
 /**
  * Knowledge job after embedding generation stage.
  * Contains vector embeddings for each text chunk.
  */
-export type EmbeddedJob = ChunkedJob & {
+export type EmbeddedJob = Omit<ChunkedJob, "chunks"> & {
   chunks: {
     list: Array<{
+      id: ReturnType<typeof ulid>
       text: string
       embedding: OpenAI.Embeddings.CreateEmbeddingResponse
     }>
     count: number
+    chunkOverlap: number
+    chunkSize: number
+    splitter?: string
+    embeddingProvider: string
+    embeddingModel: string
+    totalTokens: number
   }
 }

@@ -10,7 +10,7 @@
 import { AIClient } from "@/ai/types"
 import { ChunkedJob, EmbeddedJob } from "@/rag/types"
 
-// Dynamic import for ES module
+// Dynamic import for ES module to avoid bundling issues
 let pLimit: (concurrency: number) => <T>(fn: () => Promise<T>) => Promise<T>
 const getLimit = async () => {
   if (!pLimit) {
@@ -31,20 +31,35 @@ export async function embed(
   data: ChunkedJob,
   aiClient: AIClient,
 ): Promise<EmbeddedJob> {
-  // Get the limit function dynamically
+  // Get the concurrency limiter function dynamically
   const limit = await getLimit()
 
-  // Process all chunks concurrently with rate limiting
+  // Process all chunks concurrently with rate limiting to avoid API throttling
   const embeddedChunks = await Promise.all(
     data.chunks.list.map(async (chunk) =>
       limit(async () => ({
         ...chunk,
-        // Generate embedding for the chunk text
+        // Generate vector embedding for the chunk text using AI client
         embedding: await aiClient.createEmbedding(chunk.text),
       })),
     ),
   )
 
-  // Return job with embedded chunks, preserving original structure
-  return { ...data, chunks: { ...data.chunks, list: embeddedChunks } }
+  // Calculate total token usage across all embeddings for monitoring
+  const totalTokens = embeddedChunks.reduce(
+    (prev, current) => prev + current.embedding.usage.total_tokens,
+    0,
+  )
+
+  // Return job with embedded chunks, preserving original structure and adding metadata
+  return {
+    ...data,
+    chunks: {
+      ...data.chunks,
+      list: embeddedChunks,
+      embeddingModel: aiClient.embeddingModel,
+      embeddingProvider: aiClient.provider,
+      totalTokens,
+    },
+  }
 }
