@@ -50,10 +50,11 @@ textSplitter.name = "recursive-character-text-splitter"
  *
  * @param data - Parsed job containing document text to be chunked
  * @returns Promise resolving to ChunkedJob with structured chunk data including:
- *   - list: Array of chunk objects with text content
+ *   - list: Array of chunk objects with text content and unique IDs
  *   - count: Total number of chunks created
- *
- * ```
+ *   - chunkSize: Maximum characters per chunk used
+ *   - chunkOverlap: Overlap between chunks used
+ *   - splitter: Name of the text splitter used
  */
 export async function chunkText(data: ParsedJob): Promise<ChunkedJob> {
   // Split the document text into chunks using the configured splitter
