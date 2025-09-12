@@ -1,3 +1,16 @@
+/**
+ * Drizzle ORM configuration for database migrations and schema management.
+ *
+ * Responsibilities:
+ * - Configure database connection for Drizzle Kit migrations
+ * - Define schema file locations for code generation
+ * - Set up PostgreSQL dialect and output directory
+ * - Load environment variables for database credentials
+ *
+ * Exports:
+ * - Default configuration object for Drizzle Kit CLI operations
+ */
+
 import path from "path"
 import * as dotenv from "dotenv"
 import { defineConfig } from "drizzle-kit"
