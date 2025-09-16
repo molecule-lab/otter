@@ -19,6 +19,7 @@ import {
   KnowledgeEmbedding,
 } from "@otter/db/types"
 
+// Todo fix the casing
 /**
  * Creates a knowledge item service instance with business logic operations.
  * @param db - Database instance for knowledge item operations

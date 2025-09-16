@@ -8,7 +8,7 @@ import cors, { FastifyCorsOptions } from "@fastify/cors"
 import { FastifyInstance, FastifyRequest } from "fastify"
 import fp from "fastify-plugin"
 
-async function rateLimitPlugin(fastify: FastifyInstance) {
+async function corsConfig(fastify: FastifyInstance) {
   await fastify.register(cors, () => {
     return (
       request: FastifyRequest,
@@ -39,6 +39,6 @@ async function rateLimitPlugin(fastify: FastifyInstance) {
   })
 }
 
-export default fp(rateLimitPlugin, {
-  name: "cors",
+export default fp(corsConfig, {
+  name: "cors-config",
 })

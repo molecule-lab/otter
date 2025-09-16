@@ -35,8 +35,8 @@ import { ulid } from "ulid"
  */
 
 export const textSplitter = new RecursiveCharacterTextSplitter({
-  chunkSize: parseInt(process.env.CHUNK_SIZE || "800"), // Maximum characters per chunk
-  chunkOverlap: parseInt(process.env.CHUNK_OVERLAP || "80"), // Overlap between chunks for context preservation
+  chunkSize: parseInt(process.env.CHUNK_SIZE || "1000"), // Maximum characters per chunk
+  chunkOverlap: parseInt(process.env.CHUNK_OVERLAP || "100"), // Overlap between chunks for context preservation
 })
 
 textSplitter.name = "recursive-character-text-splitter"
@@ -67,7 +67,7 @@ export async function chunkText(data: ParsedJob): Promise<ChunkedJob> {
       // This format is required for downstream embedding and retrieval operations
       list: chunks.map((chunk) => ({
         id: ulid(),
-        text: chunk,
+        text: chunk.replace(/\n/g, " "),
       })),
       chunkSize: textSplitter.chunkSize,
       chunkOverlap: textSplitter.chunkOverlap,
