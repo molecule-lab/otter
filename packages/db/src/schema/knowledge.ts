@@ -19,10 +19,17 @@
  * - `knowledge_items` - Table for processed document metadata.
  * - `knowledge_chunks` - Table for text chunks from documents.
  * - `knowledge_embeddings` - Table for vector embeddings of chunks.
+ * - `sourcesRelations` - Relations for sources table.
+ * - `knowledgeJobsRelations` - Relations for knowledge jobs table.
+ * - `knowledgeItemsRelations` - Relations for knowledge items table.
+ * - `knowledgeChunksRelations` - Relations for knowledge chunks table.
+ * - `knowledgeEmbeddingsRelations` - Relations for knowledge embeddings table.
  */
 
+import { relations } from "drizzle-orm"
 import {
   customType,
+  doublePrecision,
   numeric,
   pgEnum,
   pgTable,
@@ -183,3 +190,119 @@ export const knowledgeEmbeddings = pgTable("knowledge_embeddings", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
 })
+
+export const knowledgeQuery = pgTable("knowledge_query", {
+  id: varchar("id", { length: 26 })
+    .primaryKey()
+    .$default(() => ulid())
+    .notNull(),
+  apikeyId: text("api_key_id")
+    .notNull()
+    .references(() => apikey.id, { onDelete: "cascade" }),
+  queryText: text("query_text").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+})
+
+export const knowledgeQueryResult = pgTable("knowledge_query_result", {
+  id: varchar("id", { length: 26 })
+    .primaryKey()
+    .$default(() => ulid())
+    .notNull(),
+  knowledgeQueryId: text("knowledge_query_id")
+    .notNull()
+    .references(() => knowledgeQuery.id, { onDelete: "cascade" }),
+  knowledgeChunkId: text("knowledge_chunk_id")
+    .notNull()
+    .references(() => knowledgeChunks.id, { onDelete: "cascade" }),
+  score: doublePrecision("score").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+})
+
+/**
+ * Relations definitions for knowledge processing tables.
+ * Establishes foreign key relationships and enables query joins.
+ */
+
+/**
+ * Sources table relations.
+ * Links sources to API keys, knowledge jobs, and knowledge items.
+ */
+export const sourcesRelations = relations(sources, ({ one, many }) => ({
+  apikey: one(apikey, {
+    fields: [sources.apikeyId],
+    references: [apikey.id],
+  }),
+  knowledgeJobs: many(knowledgeJobs),
+  knowledgeItems: many(knowledgeItems),
+}))
+
+/**
+ * Knowledge jobs table relations.
+ * Links jobs to their source documents.
+ */
+export const knowledgeJobsRelations = relations(
+  knowledgeJobs,
+  ({ one, many }) => ({
+    source: one(sources, {
+      fields: [knowledgeJobs.sourceId],
+      references: [sources.id],
+    }),
+    knowledgeItems: many(knowledgeItems),
+  }),
+)
+
+/**
+ * Knowledge items table relations.
+ * Links processed items to sources, jobs, and their text chunks.
+ */
+export const knowledgeItemsRelations = relations(
+  knowledgeItems,
+  ({ one, many }) => ({
+    source: one(sources, {
+      fields: [knowledgeItems.sourceId],
+      references: [sources.id],
+    }),
+    knowledgeJob: one(knowledgeJobs, {
+      fields: [knowledgeItems.knowledgeJobId],
+      references: [knowledgeJobs.id],
+    }),
+    knowledgeChunks: many(knowledgeChunks),
+  }),
+)
+
+/**
+ * Knowledge chunks table relations.
+ * Links text chunks to their parent knowledge items and embeddings.
+ */
+export const knowledgeChunksRelations = relations(
+  knowledgeChunks,
+  ({ one, many }) => ({
+    knowledgeItem: one(knowledgeItems, {
+      fields: [knowledgeChunks.knowledgeItemId],
+      references: [knowledgeItems.id],
+    }),
+    knowledgeEmbeddings: many(knowledgeEmbeddings),
+  }),
+)
+
+/**
+ * Knowledge embeddings table relations.
+ * Links vector embeddings to their corresponding text chunks.
+ */
+export const knowledgeEmbeddingsRelations = relations(
+  knowledgeEmbeddings,
+  ({ one }) => ({
+    knowledgeChunk: one(knowledgeChunks, {
+      fields: [knowledgeEmbeddings.knowledgeChunkId],
+      references: [knowledgeChunks.id],
+    }),
+  }),
+)

@@ -16,11 +16,18 @@ import {
   account,
   apikey,
   knowledgeChunks,
+  knowledgeChunksRelations,
   knowledgeEmbeddings,
+  knowledgeEmbeddingsRelations,
   knowledgeItems,
+  knowledgeItemsRelations,
   knowledgeJobs,
+  knowledgeJobsRelations,
+  knowledgeQuery,
+  knowledgeQueryResult,
   session,
   sources,
+  sourcesRelations,
   user,
   verification,
 } from "@/schema"
@@ -29,7 +36,7 @@ import { NodePgDatabase } from "drizzle-orm/node-postgres"
 
 /**
  * Type definition representing the complete database schema structure.
- * Combines all table definitions for type-safe database operations.
+ * Combines all table definitions and relations for type-safe database operations.
  */
 export type DatabaseSchema = {
   user: typeof user
@@ -38,10 +45,17 @@ export type DatabaseSchema = {
   session: typeof session
   verification: typeof verification
   knowledgeJobs: typeof knowledgeJobs
+  knowledgeJobsRelations: typeof knowledgeJobsRelations
   sources: typeof sources
+  sourcesRelations: typeof sourcesRelations
   knowledgeItems: typeof knowledgeItems
+  knowledgeItemsRelations: typeof knowledgeItemsRelations
   knowledgeChunks: typeof knowledgeChunks
+  knowledgeChunksRelations: typeof knowledgeChunksRelations
   knowledgeEmbeddings: typeof knowledgeEmbeddings
+  knowledgeEmbeddingsRelations: typeof knowledgeEmbeddingsRelations
+  knowledgeQuery: typeof knowledgeQuery
+  knowledgeQueryResult: typeof knowledgeQueryResult
 }
 
 /**
@@ -85,3 +99,7 @@ export type KnowledgeChunk = InferInsertModel<typeof knowledgeChunks>
  * Represents the data structure for creating vector embeddings for text chunks.
  */
 export type KnowledgeEmbedding = InferInsertModel<typeof knowledgeEmbeddings>
+
+export type KnowledgeQuery = InferInsertModel<typeof knowledgeQuery>
+
+export type KnowledgeQueryResult = InferInsertModel<typeof knowledgeQueryResult>

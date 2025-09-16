@@ -11,6 +11,7 @@
 
 import { KnowledgeItemService } from "@/services/knowledge-item"
 import { knowledgeJobService } from "@/services/knowledge-job"
+import { knowledgeQueryService } from "@/services/knowledge-query"
 import { sourceService } from "@/services/source"
 import { FastifyReply, FastifyRequest } from "fastify"
 
@@ -69,13 +70,39 @@ const createKnowledge = async (
 }
 
 /**
- * Placeholder handler for knowledge retrieval functionality.
- * @param _ - Fastify request object (unused)
+ * Handles semantic search queries against the knowledge base.
+ * Performs vector similarity search to find relevant document chunks and stores query history.
+ * @param request - Fastify request object with query string parameter 'q'
  * @param reply - Fastify reply object for sending response
- * @returns Promise that resolves to success response with placeholder message
+ * @returns Promise that resolves to success response with matching document chunks and similarity scores
  */
-const fetchKnowledge = async (_: FastifyRequest, reply: FastifyReply) => {
-  return reply.code(200).send({ message: "Fetch Documents" })
+const fetchKnowledge = async (
+  request: FastifyRequest<{
+    Querystring: { q: string }
+  }>,
+  reply: FastifyReply,
+) => {
+  // Extract search query from request parameters
+  const { q } = request.query
+
+  // Initialize knowledge query service with required dependencies
+  const knowledgeQueryServiceInstance = knowledgeQueryService(
+    request.server.db,
+    request.server.ai,
+    request.server.repositories.knowledgeEmbedding,
+  )
+
+  // Perform semantic search to find relevant document chunks
+  const result = await knowledgeQueryServiceInstance.fetchChunks(q)
+
+  // Store query and results for analytics and history tracking
+  await knowledgeQueryServiceInstance.saveKnowledgeQuery(
+    q,
+    request.apiKeyId!,
+    result,
+  )
+
+  return reply.code(200).send({ message: "Fetch Documents", result: result })
 }
 
 export { createKnowledge, fetchKnowledge }
