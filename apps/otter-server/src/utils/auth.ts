@@ -17,17 +17,24 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { apiKey, bearer } from "better-auth/plugins"
 import { ulid } from "ulid"
 
-// Todo make this accept trusted origins, baseurl and secret
 /**
  * Creates a configured Better Auth instance with database adapter and plugins.
  * @param db - Optional database instance for auth data persistence
+ * @param options - Configuration options for auth instance
+ * @param options.origins - Comma-separated list of trusted origins for CORS
+ * @param options.baseUrl - Base URL for auth callbacks and redirects
+ * @param options.secret - Secret key for signing tokens and sessions
  * @returns Configured Better Auth instance with email/password and API key support
  */
-export function createAuth(db?: DatabaseInstance) {
+export function createAuth(
+  db?: DatabaseInstance,
+  options?: { origins?: string; baseUrl?: string; secret?: string },
+) {
   return betterAuth({
-    trustedOrigins: ["http://localhost:3001"],
+    trustedOrigins: options?.origins?.split(","),
     appName: "Otter",
-    baseURL: "http://localhost:3001",
+    baseURL: options?.baseUrl,
+    secret: options?.secret,
     database: drizzleAdapter(db!, {
       provider: "pg",
       schema: { account, apikey, session, user, verification },
