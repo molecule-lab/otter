@@ -4,6 +4,7 @@
  * Responsibilities:
  * - Validate and provide access to environment variables.
  * - Configure database connection, AI provider settings, server port, and rate limiting.
+ * - Configure authentication settings (origins, base URL, secret) for Better Auth.
  * - Ensure required environment variables are present at startup.
  * - Provide type-safe configuration access through Fastify instance.
  * - Support configurable rate limiting via MAX_REQUEST_PER_MINUTE environment variable.
@@ -25,6 +26,9 @@ declare module "fastify" {
       AI_PROVIDER: "openai"
       AI_PROVIDER_API_KEY: string
       MAX_REQUEST_PER_MINUTE: number
+      ORIGINS: string
+      BASE_URL: string
+      AUTH_SECRET: string
     }
   }
 }
@@ -38,10 +42,18 @@ declare module "fastify" {
  * - Database connection (DB_CONNECTION_URL)
  * - AI provider configuration (AI_PROVIDER, AI_PROVIDER_API_KEY)
  * - Rate limiting configuration (MAX_REQUEST_PER_MINUTE)
+ * - Authentication configuration (ORIGINS, BASE_URL, AUTH_SECRET)
  */
 const schema = {
   type: "object",
-  required: ["DB_CONNECTION_URL", "AI_PROVIDER", "AI_PROVIDER_API_KEY"],
+  required: [
+    "DB_CONNECTION_URL",
+    "AI_PROVIDER",
+    "AI_PROVIDER_API_KEY",
+    "ORIGINS",
+    "BASE_URL",
+    "AUTH_SECRET",
+  ],
   properties: {
     PORT: {
       type: "number",
@@ -62,6 +74,15 @@ const schema = {
       default: 100,
       description:
         "Maximum number of requests allowed per minute for rate limiting",
+    },
+    ORIGINS: {
+      type: "string",
+    },
+    BASE_URL: {
+      type: "string",
+    },
+    AUTH_SECRET: {
+      type: "string",
     },
   },
 }

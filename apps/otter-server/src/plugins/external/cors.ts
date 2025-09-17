@@ -1,8 +1,13 @@
-// /**
-//  * This plugins enables the use of CORS.
-//  *
-//  * @see {@link https://github.com/fastify/fastify-cors}
-//  */
+/**
+ * Fastify CORS plugin with configurable origins and dynamic public route handling.
+ *
+ * Responsibilities:
+ * - Configure CORS with origins from environment configuration (comma-separated)
+ * - Allow all origins for public routes (/ and routes containing "public")
+ * - Set up standard CORS headers and methods for API access
+ *
+ * @see {@link https://github.com/fastify/fastify-cors}
+ */
 
 import cors, { FastifyCorsOptions } from "@fastify/cors"
 import { FastifyInstance, FastifyRequest } from "fastify"
@@ -15,7 +20,7 @@ async function corsConfig(fastify: FastifyInstance) {
       callback: (error: Error | null, corsOptions: FastifyCorsOptions) => void,
     ) => {
       const corsOptions = {
-        origin: "http://localhost:3001",
+        origin: fastify.config.ORIGINS.split(","),
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         allowedHeaders: [
           "Content-Type",
@@ -28,9 +33,8 @@ async function corsConfig(fastify: FastifyInstance) {
         preflightContinue: true,
       }
 
-      //Todo: Allow Set Origins for public URL
       if (request.raw.url === "/" || request.raw.url?.includes("public")) {
-        corsOptions.origin = "*"
+        corsOptions.origin = ["*"]
       }
 
       // callback expects two parameters: error and options
