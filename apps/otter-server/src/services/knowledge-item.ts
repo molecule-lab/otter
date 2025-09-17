@@ -25,7 +25,7 @@ import {
  * @param db - Database instance for knowledge item operations
  * @returns Service object with knowledge storage methods
  */
-function KnowledgeItemService(db: DatabaseInstance) {
+function knowledgeItemService(db: DatabaseInstance) {
   return {
     /**
      * Stores complete knowledge data from an embedded job in the database.
@@ -80,4 +80,4 @@ function KnowledgeItemService(db: DatabaseInstance) {
   }
 }
 
-export { KnowledgeItemService }
+export { knowledgeItemService }

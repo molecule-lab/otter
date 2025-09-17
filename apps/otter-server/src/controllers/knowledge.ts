@@ -9,7 +9,7 @@
  * - Process documents synchronously through parse, chunk, embed, and store operations.
  */
 
-import { KnowledgeItemService } from "@/services/knowledge-item"
+import { knowledgeItemService } from "@/services/knowledge-item"
 import { knowledgeJobService } from "@/services/knowledge-job"
 import { knowledgeQueryService } from "@/services/knowledge-query"
 import { sourceService } from "@/services/source"
@@ -56,7 +56,7 @@ const createKnowledge = async (
     await knowledgeJobServiceInstance.processJob(knowledgeJob)
 
   // Store final knowledge item with chunks and embeddings in database
-  const knowledgeItem = await KnowledgeItemService(
+  const knowledgeItem = await knowledgeItemService(
     request.server.db,
   ).storeKnowledge(processedJob)
 
