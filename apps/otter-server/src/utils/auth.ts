@@ -43,6 +43,8 @@ export function createAuth(
       database: {
         generateId: () => ulid(),
       },
+      cookiePrefix: "otter",
+      useSecureCookies: true,
     },
     basePath: "/api/v1/auth",
     emailAndPassword: {
