@@ -8,6 +8,13 @@
       "when": 1757510557216,
       "tag": "0000_orange_human_torch",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1758129773899,
+      "tag": "0001_charming_landau",
+      "breakpoints": true
     }
   ]
 }

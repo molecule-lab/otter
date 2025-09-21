@@ -9,8 +9,18 @@
  */
 
 import { createKnowledge, fetchKnowledge } from "@/controllers/knowledge"
+import {
+  createKnowledgeSchema,
+  fetchKnowledgeSchema,
+} from "@/openapi/knowledge"
 import { FastifyInstance } from "fastify"
 
+/**
+ * Knowledge routes plugin that registers document processing and search endpoints.
+ * Includes API key verification middleware for all routes.
+ * @param fastify - Fastify instance to register the knowledge routes on
+ * @returns Promise that resolves when all routes and hooks are registered
+ */
 const plugin = async (fastify: FastifyInstance) => {
   // Verify API key for all knowledge endpoints to ensure authenticated access
   fastify.addHook("preHandler", async (request, reply) => {
@@ -34,20 +44,18 @@ const plugin = async (fastify: FastifyInstance) => {
     request.apiKeyId = apiKey.key?.id
   })
 
-  fastify.post("/", {}, createKnowledge)
+  fastify.post(
+    "/",
+    {
+      schema: createKnowledgeSchema,
+    },
+    createKnowledge,
+  )
 
   fastify.get(
     "/",
     {
-      schema: {
-        querystring: {
-          type: "object",
-          properties: {
-            q: { type: "string" },
-          },
-          required: ["q"],
-        },
-      },
+      schema: fetchKnowledgeSchema,
     },
     fetchKnowledge,
   )
