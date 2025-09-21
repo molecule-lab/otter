@@ -8,20 +8,19 @@
  */
 
 import { healthCheckHandler } from "@/controllers/healthz"
-import { Type } from "@fastify/type-provider-typebox"
+import { healthSchema } from "@/openapi/health"
 import { FastifyInstance } from "fastify"
 
+/**
+ * Health check route plugin that registers the root health endpoint.
+ * @param fastify - Fastify instance to register the health check route on
+ * @returns Promise that resolves when the route is registered
+ */
 const plugin = async (fastify: FastifyInstance) => {
   fastify.get(
     "/",
     {
-      schema: {
-        response: {
-          200: Type.Object({
-            message: Type.String(),
-          }),
-        },
-      },
+      schema: healthSchema,
     },
     healthCheckHandler,
   )

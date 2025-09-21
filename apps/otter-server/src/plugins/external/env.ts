@@ -29,6 +29,7 @@ declare module "fastify" {
       ORIGINS: string
       BASE_URL: string
       AUTH_SECRET: string
+      NODE_ENV: string
     }
   }
 }
@@ -53,6 +54,7 @@ const schema = {
     "ORIGINS",
     "BASE_URL",
     "AUTH_SECRET",
+    "NODE_ENV",
   ],
   properties: {
     PORT: {
@@ -83,6 +85,11 @@ const schema = {
     },
     AUTH_SECRET: {
       type: "string",
+    },
+    NODE_ENV: {
+      type: "string",
+      enum: ["development", "staging", "production"],
+      default: "production",
     },
   },
 }
