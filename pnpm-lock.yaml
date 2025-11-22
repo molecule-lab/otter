@@ -192,6 +192,9 @@ importers:
       '@otter/db':
         specifier: workspace:*
         version: link:../db
+      '@otter/utils':
+        specifier: workspace:*
+        version: link:../utils
       drizzle-orm:
         specifier: ^0.44.5
         version: 0.44.5(@neondatabase/serverless@1.0.1)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.5)(better-sqlite3@12.2.0)(kysely@0.28.5)(pg@8.16.3)
@@ -266,6 +269,8 @@ importers:
       typescript-eslint:
         specifier: ^8.42.0
         version: 8.42.0(eslint@9.34.0(jiti@2.5.1))(typescript@5.9.2)
+
+  packages/utils: {}
 
 packages:
 

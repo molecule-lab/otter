@@ -9,6 +9,7 @@
 
 import { AIClient } from "@/ai/types"
 import { ChunkedJob, EmbeddedJob } from "@/rag/types"
+import { safeParseInt } from "@otter/utils"
 
 // Dynamic import for ES module to avoid bundling issues
 let pLimit: (concurrency: number) => <T>(fn: () => Promise<T>) => Promise<T>
@@ -17,7 +18,7 @@ const getLimit = async () => {
     const module = await import("p-limit")
     pLimit = module.default
   }
-  return pLimit(parseInt(process.env.MAX_PARALLEL_AI_CALLS || "25"))
+  return pLimit(safeParseInt(process.env.MAX_PARALLEL_AI_CALLS, 25))
 }
 
 /**

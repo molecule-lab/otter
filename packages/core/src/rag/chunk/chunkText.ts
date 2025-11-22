@@ -18,6 +18,7 @@
 
 import { ChunkedJob, ParsedJob } from "@/rag/types"
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters"
+import { safeParseInt } from "@otter/utils"
 import { ulid } from "ulid"
 
 /**
@@ -35,8 +36,8 @@ import { ulid } from "ulid"
  */
 
 export const textSplitter = new RecursiveCharacterTextSplitter({
-  chunkSize: parseInt(process.env.CHUNK_SIZE || "1000"), // Maximum characters per chunk
-  chunkOverlap: parseInt(process.env.CHUNK_OVERLAP || "100"), // Overlap between chunks for context preservation
+  chunkSize: safeParseInt(process.env.CHUNK_SIZE, 1000), // Maximum characters per chunk
+  chunkOverlap: safeParseInt(process.env.CHUNK_OVERLAP, 100), // Overlap between chunks for context preservation
 })
 
 textSplitter.name = "recursive-character-text-splitter"

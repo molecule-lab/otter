@@ -15,6 +15,7 @@
   "dependencies": {
     "@langchain/textsplitters": "^0.1.0",
     "@otter/db": "workspace:*",
+    "@otter/utils": "workspace:*",
     "drizzle-orm": "^0.44.5",
     "openai": "^5.19.1",
     "p-limit": "^7.1.1",
