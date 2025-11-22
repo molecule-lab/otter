@@ -40,6 +40,7 @@ async function errorHandler(fastify: FastifyInstance) {
     const statusCode = err.statusCode ?? err.status ?? 500
     reply.code(statusCode)
 
+    // Todo: Remove errorTrace in production 
     // Return consistent error response structure
     return {
       status: "error",

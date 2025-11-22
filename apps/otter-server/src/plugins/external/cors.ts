@@ -33,6 +33,7 @@ async function corsConfig(fastify: FastifyInstance) {
         preflightContinue: true,
       }
 
+      // Todo: Implement a more robust checking for public routes instead of only using public.
       if (request.raw.url === "/" || request.raw.url?.includes("public")) {
         corsOptions.origin = ["*"]
       }

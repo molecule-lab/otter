@@ -34,7 +34,7 @@ function getLoggerOptions() {
       },
     }
   }
-
+  // Todo: Understand this level: silent and if required change it to debug
   // Silent logging for production environments
   return { level: "silent" }
 }

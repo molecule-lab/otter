@@ -121,6 +121,7 @@ export const knowledgeJobs = pgTable("knowledge_jobs", {
     .notNull(),
 })
 
+// Todo: check diff between numeric and integer and change accordingly
 /**
  * Knowledge items table for storing processed document metadata.
  * Contains configuration and statistics from the RAG processing pipeline.
