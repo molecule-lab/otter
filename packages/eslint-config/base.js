@@ -30,6 +30,7 @@ export const config = [
       "unused-imports/no-unused-imports": "error",
       "no-return-await": "error",
       "no-console": "error",
+      "func-style": ["error", "declaration", { allowArrowFunctions: false }],
       "no-restricted-syntax": [
         "error",
         {

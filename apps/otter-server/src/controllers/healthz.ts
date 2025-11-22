@@ -14,6 +14,7 @@ import { FastifyReply, FastifyRequest } from "fastify"
  * @param reply - Fastify reply object for sending response
  * @returns Promise that resolves to 200 response with welcome message
  */
+// eslint-disable-next-line func-style
 export const healthCheckHandler = async (
   _: FastifyRequest,
   reply: FastifyReply,

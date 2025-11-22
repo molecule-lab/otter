@@ -23,6 +23,7 @@ import { FastifyReply, FastifyRequest } from "fastify"
  * @param reply - Fastify reply object for sending response
  * @returns Promise that resolves to success response with knowledge item data or error response
  */
+// eslint-disable-next-line func-style
 const createKnowledge = async (
   request: FastifyRequest,
   reply: FastifyReply,
@@ -76,6 +77,7 @@ const createKnowledge = async (
  * @param reply - Fastify reply object for sending response
  * @returns Promise that resolves to success response with matching document chunks and similarity scores
  */
+// eslint-disable-next-line func-style
 const fetchKnowledge = async (
   request: FastifyRequest<{
     Querystring: { q: string }

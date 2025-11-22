@@ -17,6 +17,7 @@ import { OpenAPIV3 } from "openapi-types"
  * @param defaultStatusCode - HTTP status code to use as default in schema
  * @returns OpenAPI schema object for error responses with consistent structure
  */
+// eslint-disable-next-line func-style
 const errorSchema = (defaultStatusCode: number): OpenAPIV3.SchemaObject => ({
   type: "object",
   properties: {

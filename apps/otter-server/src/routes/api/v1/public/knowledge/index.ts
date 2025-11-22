@@ -21,6 +21,7 @@ import { FastifyInstance } from "fastify"
  * @param fastify - Fastify instance to register the knowledge routes on
  * @returns Promise that resolves when all routes and hooks are registered
  */
+// eslint-disable-next-line func-style
 const plugin = async (fastify: FastifyInstance) => {
   // Verify API key for all knowledge endpoints to ensure authenticated access
   fastify.addHook("preHandler", async (request, reply) => {

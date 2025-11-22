@@ -13,6 +13,7 @@ import { safeParseInt } from "@otter/utils"
 
 // Dynamic import for ES module to avoid bundling issues
 let pLimit: (concurrency: number) => <T>(fn: () => Promise<T>) => Promise<T>
+// eslint-disable-next-line func-style
 const getLimit = async () => {
   if (!pLimit) {
     const module = await import("p-limit")

@@ -16,6 +16,7 @@ import { FastifyInstance } from "fastify"
  * @param fastify - Fastify instance to register the health check route on
  * @returns Promise that resolves when the route is registered
  */
+// eslint-disable-next-line func-style
 const plugin = async (fastify: FastifyInstance) => {
   fastify.get(
     "/",
