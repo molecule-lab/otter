@@ -1,0 +1,12 @@
+{
+  "name": "@otter/vitest-config",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "exports": {
+    "./base": "./vitest.config.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

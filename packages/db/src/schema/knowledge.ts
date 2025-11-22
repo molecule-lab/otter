@@ -192,6 +192,10 @@ export const knowledgeEmbeddings = pgTable("knowledge_embeddings", {
     .notNull(),
 })
 
+/**
+ * Knowledge query table for storing semantic search queries.
+ * Tracks user queries with API key associations for analytics and access control.
+ */
 export const knowledgeQuery = pgTable("knowledge_query", {
   id: varchar("id", { length: 26 })
     .primaryKey()
@@ -208,6 +212,10 @@ export const knowledgeQuery = pgTable("knowledge_query", {
     .notNull(),
 })
 
+/**
+ * Knowledge query result table for storing search result relationships.
+ * Links queries to matching chunks with similarity scores for analytics.
+ */
 export const knowledgeQueryResult = pgTable("knowledge_query_result", {
   id: varchar("id", { length: 26 })
     .primaryKey()

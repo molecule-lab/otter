@@ -7,9 +7,13 @@
   "scripts": {
     "build": "tsc  && tsc-alias ",
     "lint": "eslint src --ext .ts,.js",
-    "lint:fix": "eslint src --ext .ts,.js --fix"
+    "lint:fix": "eslint src --ext .ts,.js --fix",
+    "test": "vitest --coverage"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@otter/vitest-config": "workspace:*"
+  }
 }

@@ -22,7 +22,16 @@ export default {
     "scope-enum": [
       2,
       "always",
-      ["otter-server", "api", "core", "db", "eslint-config", "root", "utils"],
+      [
+        "otter-server",
+        "api",
+        "core",
+        "db",
+        "eslint-config",
+        "root",
+        "utils",
+        "vitest-config",
+      ],
     ],
     "scope-empty": [2, "never"],
   },
