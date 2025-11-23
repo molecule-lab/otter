@@ -8,9 +8,9 @@
  */
 
 import { AIClient } from "@/ai/types"
-import { chunk } from "@/rag/chunk"
-import { embed } from "@/rag/embed"
-import { parse } from "@/rag/parse"
+import { chunk } from "@/rag/chunk/chunk"
+import { embed } from "@/rag/embed/embed"
+import { parse } from "@/rag/parse/parse"
 import { EmbeddedJob } from "@/rag/types"
 import { KnowledgeJobWithSource } from "@otter/db/types"
 
