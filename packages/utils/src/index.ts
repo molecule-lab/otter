@@ -10,4 +10,4 @@
  * - All exports from `./lib` - Utility library functions
  */
 
-export * from "./lib"
+export * from "./lib/safeParseInt"

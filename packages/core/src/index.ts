@@ -13,6 +13,6 @@
  * - Individual RAG processing modules and utilities
  */
 
-export * from "./ai/clients/index"
+export * from "./ai/clients/createAIClient"
 export * from "./ai/types"
-export * from "./rag"
+export * from "./rag/processKnowledgeJob"
