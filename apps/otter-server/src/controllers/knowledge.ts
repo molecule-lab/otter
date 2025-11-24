@@ -97,6 +97,7 @@ const fetchKnowledge = async (
   // Perform semantic search to find relevant document chunks
   const result = await knowledgeQueryServiceInstance.fetchChunks(q)
 
+  // Todo Fix the saving of knowledge query when result is empty
   // Store query and results for analytics and history tracking
   await knowledgeQueryServiceInstance.saveKnowledgeQuery(
     q,
