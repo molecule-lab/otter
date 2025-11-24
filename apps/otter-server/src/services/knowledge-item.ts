@@ -44,13 +44,13 @@ function knowledgeItemService(db: DatabaseInstance) {
         const knowledgeItem = await knowledgeItemRepository.createOne({
           knowledgeJobId: embeddedJob.id,
           sourceId: embeddedJob.sourceId,
-          chunkOverlap: embeddedJob.chunks.chunkOverlap.toString(),
-          chunksCount: embeddedJob.chunks.count.toString(),
-          chunkSize: embeddedJob.chunks.chunkSize.toString(),
+          chunkOverlap: embeddedJob.chunks.chunkOverlap,
+          chunksCount: embeddedJob.chunks.count,
+          chunkSize: embeddedJob.chunks.chunkSize,
           embeddingModel: embeddedJob.chunks.embeddingModel,
           embeddingProvider: embeddedJob.chunks.embeddingProvider,
           splitter: embeddedJob.chunks.splitter,
-          totalTokens: embeddedJob.chunks.totalTokens.toString(),
+          totalTokens: embeddedJob.chunks.totalTokens,
         })
 
         // Transform and store text chunks

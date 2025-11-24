@@ -30,6 +30,7 @@ import { relations } from "drizzle-orm"
 import {
   customType,
   doublePrecision,
+  integer,
   numeric,
   pgEnum,
   pgTable,
@@ -121,7 +122,6 @@ export const knowledgeJobs = pgTable("knowledge_jobs", {
     .notNull(),
 })
 
-// Todo: check diff between numeric and integer and change accordingly
 /**
  * Knowledge items table for storing processed document metadata.
  * Contains configuration and statistics from the RAG processing pipeline.
@@ -137,13 +137,13 @@ export const knowledgeItems = pgTable("knowledge_items", {
   knowledgeJobId: text("knowledge_job_id").references(() => knowledgeJobs.id, {
     onDelete: "set null",
   }),
-  chunksCount: numeric("chunks_count").notNull(),
-  chunkSize: numeric("chunk_size").notNull(),
-  chunkOverlap: numeric("chunk_overlap").notNull(),
+  chunksCount: integer("chunks_count").notNull(),
+  chunkSize: integer("chunk_size").notNull(),
+  chunkOverlap: integer("chunk_overlap").notNull(),
   splitter: text("splitter"),
   embeddingModel: text("embedding_model").notNull(),
   embeddingProvider: text("embedding_provider").notNull(),
-  totalTokens: numeric("total_tokens").notNull(),
+  totalTokens: integer("total_tokens").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
